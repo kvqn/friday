@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "f319d901-c79e-4b7f-972e-902297b96b26",
+  "id": "d3b08e11-782d-476c-88b8-b8a36503da43",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "logs": {
@@ -18,7 +18,7 @@
           "name": "namespace",
           "type": "char(128)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "'default'"
         },
@@ -26,7 +26,7 @@
           "name": "topic",
           "type": "char(128)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "'default'"
         },
@@ -34,7 +34,7 @@
           "name": "level",
           "type": "enum('DEBUG','INFO','WARNING','ERROR','CRITICAL')",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "'INFO'"
         },
@@ -49,7 +49,7 @@
           "name": "timestamp",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "(now())"
         }
