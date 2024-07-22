@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "dev": "bun --hot run server.ts"
+  },
+  "dependencies": {
+    "@trpc/server": "^11.0.0-rc.466"
+  }
+}
