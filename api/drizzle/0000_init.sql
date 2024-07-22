@@ -1,5 +1,5 @@
 CREATE TABLE `logs` (
-	`id` serial AUTO_INCREMENT NOT NULL,
+	`id` serial NOT NULL,
 	`namespace` char(128) NOT NULL DEFAULT 'default',
 	`topic` char(128) NOT NULL DEFAULT 'default',
 	`level` enum('DEBUG','INFO','WARNING','ERROR','CRITICAL') NOT NULL DEFAULT 'INFO',
