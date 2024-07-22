@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "dev": "bun --hot run server.ts",
-    "migrate": "bun db/migrate.ts"
+    "dev": "bun --hot run src/server.ts",
+    "migrate": "bun src/db/migrate.ts"
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.10.1",
