@@ -18,8 +18,7 @@ class Handler(logging.Handler):
             "data": record.getMessage(),
             "level": record.levelname
         }
-        resp = requests.post(post_endpoint, json=data)
-        print(resp.json())
+        requests.post(post_endpoint, json=data)
 
 class Logger(logging.Logger):
     def __init__(self, endpoint: str, namespace: Optional[str] = None, topic: Optional[str] = None):
