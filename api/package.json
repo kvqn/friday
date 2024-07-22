@@ -1,8 +1,17 @@
 {
   "scripts": {
-    "dev": "bun --hot run server.ts"
+    "dev": "bun --hot run server.ts",
+    "migrate": "bun db/migrate.ts"
   },
   "dependencies": {
-    "@trpc/server": "^11.0.0-rc.466"
+    "@t3-oss/env-core": "^0.10.1",
+    "@trpc/server": "^11.0.0-rc.466",
+    "@types/node": "^20.14.11",
+    "drizzle-orm": "^0.32.0",
+    "mysql2": "^3.10.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.23.0"
   }
 }
