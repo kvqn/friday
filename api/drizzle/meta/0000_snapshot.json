@@ -59,9 +59,7 @@
       "compositePrimaryKeys": {
         "logs_id": {
           "name": "logs_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
