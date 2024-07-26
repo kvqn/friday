@@ -12,6 +12,8 @@ import "react-native-reanimated"
 import { useColorScheme } from "@/hooks/useColorScheme"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { Drawer } from "expo-router/drawer"
+import { EndpointsProvider } from "@/contexts/endpoints"
+import { CustomDrawerContent } from "@/components/drawer"
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -34,11 +36,30 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <Drawer>
-          <Drawer.Screen name="home" />
-        </Drawer>
-      </GestureHandlerRootView>
+      <EndpointsProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <Drawer drawerContent={CustomDrawerContent}>
+            <Drawer.Screen
+              name="index"
+              options={{
+                title: "Home",
+              }}
+            />
+            <Drawer.Screen
+              name="add-endpoint"
+              options={{
+                title: "Add Endpoint",
+              }}
+            />
+            <Drawer.Screen
+              name="endpoint/[endpoint_index]"
+              options={{
+                title: "Endpoint",
+              }}
+            />
+          </Drawer>
+        </GestureHandlerRootView>
+      </EndpointsProvider>
     </ThemeProvider>
   )
 }
