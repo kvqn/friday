@@ -16,7 +16,6 @@ export async function getStoredEndpoints() {
 export async function setStoredEndpoints(endpoints: Array<Endpoint>) {
   try {
     await AsyncStorage.setItem("endpoints", JSON.stringify(endpoints))
-    console.log("dfkjbvjkdf")
   } catch {
     console.error("Error while saving endpoints")
   }

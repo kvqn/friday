@@ -10,14 +10,14 @@ export const jsonSchema: z.ZodType<Json> = z.lazy(() =>
 
 const levelSchema = z.enum(["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"])
 
-export const logInputSchema = z.object({
+export const createLogSchema = z.object({
   namespace: z.string().optional(),
   topic: z.string().optional(),
   level: levelSchema.optional(),
   data: jsonSchema,
 })
 
-export const querySchema = z
+export const getLogsSchema = z
   .object({
     namespaces: z.array(z.string()).optional(),
     topics: z.array(z.string()).optional(),
@@ -35,3 +35,9 @@ export const querySchema = z
     limit: z.number().int().positive().optional(),
   })
   .default({})
+
+export const getNamespacesSchema = z.null()
+
+export const getTopicsSchema = z.object({
+  namespace: z.string(),
+})
