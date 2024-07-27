@@ -7,7 +7,7 @@ import {
 } from "../zod-schemas"
 import { db } from "./conn"
 import { logs } from "./schema"
-import { and, eq, gte, inArray, lte } from "drizzle-orm"
+import { and, eq, gte, inArray, lte, or } from "drizzle-orm"
 
 export async function createLog(log: z.infer<typeof createLogSchema>) {
   console.log("Creating log")
@@ -24,10 +24,13 @@ export async function getLogs(query: z.infer<typeof getLogsSchema>) {
         query.after ? gte(logs.timestamp, query.after) : undefined,
         query.before ? lte(logs.timestamp, query.before) : undefined,
         query.level ? eq(logs.level, query.level) : undefined,
-        query.namespaces
-          ? inArray(logs.namespace, query.namespaces)
+        query.namespacesAndTopics
+          ? or(
+              ...query.namespacesAndTopics.map(({ namespace, topic }) =>
+                and(eq(logs.namespace, namespace), eq(logs.topic, topic)),
+              ),
+            )
           : undefined,
-        query.topics ? inArray(logs.topic, query.topics) : undefined,
       ),
     )
     .limit(query.limit ?? 100)
@@ -44,10 +47,9 @@ export async function getNamespaces(
 
 export async function getTopics(query: z.infer<typeof getTopicsSchema>) {
   console.log("getTopics")
-  return (
-    await db
-      .selectDistinct({ topic: logs.topic })
-      .from(logs)
-      .where(eq(logs.namespace, query.namespace))
-  ).map((row) => row.topic)
+  if (query.namespaces.length === 0) return []
+  return await db
+    .selectDistinct({ topic: logs.topic, namespace: logs.namespace })
+    .from(logs)
+    .where(inArray(logs.namespace, query.namespaces))
 }

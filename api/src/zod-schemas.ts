@@ -19,8 +19,14 @@ export const createLogSchema = z.object({
 
 export const getLogsSchema = z
   .object({
-    namespaces: z.array(z.string()).optional(),
-    topics: z.array(z.string()).optional(),
+    namespacesAndTopics: z
+      .array(
+        z.object({
+          namespace: z.string(),
+          topic: z.string(),
+        }),
+      )
+      .optional(),
     level: levelSchema.optional(),
     before: z
       .string()
@@ -39,5 +45,5 @@ export const getLogsSchema = z
 export const getNamespacesSchema = z.null()
 
 export const getTopicsSchema = z.object({
-  namespace: z.string(),
+  namespaces: z.array(z.string()),
 })
