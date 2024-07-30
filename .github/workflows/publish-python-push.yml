@@ -6,6 +6,7 @@ on:
       - sdks/python/friday-logger/**
     branches:
       - main
+  workflow_dispatch: {}
 
 jobs:
   publish-python-push:
