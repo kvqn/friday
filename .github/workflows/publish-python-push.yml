@@ -20,7 +20,7 @@ jobs:
         working-directory: sdks/python/friday-logger
       - run: hatch build
         working-directory: sdks/python/friday-logger
-      - run: hatch publish -r test --no-prompt
+      - run: hatch publish -r main --no-prompt
         working-directory: sdks/python/friday-logger
         env:
           HATCH_INDEX_USER: ${{ secrets.HATCH_INDEX_USER }}
