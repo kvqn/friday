@@ -1,5 +1,5 @@
 name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: (dev) ${{ github.actor }} is trying to publish a python package
 on:
   push:
     branches:
@@ -9,14 +9,25 @@ on:
       - development
 
 jobs:
-  Explore-GitHub-Actions:
+  publish-python-dev:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v5
         with:
           python-version: "3.9"
-      - run: cd sdks/python/friday-logger
       - run: pip install -r requirements.txt
+        working-directory: sdks/python/friday-logger
       - run: echo ${{ github.sha }}
-      - run: hatch version "$(hatch version).dev.${{ github.sha }}
+        working-directory: sdks/python/friday-logger
+      - uses: onyxmueller/build-tag-number@v1
+        name: Generate build number
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+      - run: echo new build number $BUILD_NUMBER
+      # - run: hatch version $(hatch version).dev.${{ github.sha }}
+      #   working-directory: sdks/python/friday-logger
+      # - run: hatch build
+      #   working-directory: sdks/python/friday-logger
+      # - run: hatch publish
+      #   working-directory: sdks/python/friday-logger
