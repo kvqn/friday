@@ -1,9 +1,9 @@
-# friday_logger
+# friday
 
 [![PyPI - Version](https://img.shields.io/pypi/v/friday-logger.svg)](https://pypi.org/project/friday-logger)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/friday-logger.svg)](https://pypi.org/project/friday-logger)
 
------
+---
 
 ## Table of Contents
 
