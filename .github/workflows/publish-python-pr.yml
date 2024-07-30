@@ -1,0 +1,66 @@
+name: (Dev) Publish Python Package
+run-name: (Dev) Python Package Version ${{ github.run_id }}
+on:
+  pull_request:
+    paths:
+      - sdks/python/friday-logger/**
+    branches:
+      - main
+
+jobs:
+  publish-python-pr:
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Install python dependencies
+        run: pip install -r requirements.txt
+        working-directory: sdks/python/friday-logger
+
+      - name: Extract versions
+        id: extract_versions
+        run: |
+          CURRENT_VERSION=$(cat sdks/python/friday-logger/src/friday_logger/__about__.py | grep __version__ | grep -oP '(?<=").*(?=")')
+          echo "Current Version : $CURRENT_VERSION"
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
+
+          CURRENT_VERSION_WITHOUT_DEV=$(echo $CURRENT_VERSION | grep -oP '(\d+\.\d+\.\d+(?:(?:a|b|rc)\d+)?(?:\.post\d+)?)')
+          echo "Current Version without dev : $CURRENT_VERSION_WITHOUT_DEV"
+          echo "CURRENT_VERSION_WITHOUT_DEV=$CURRENT_VERSION_WITHOUT_DEV" >> "$GITHUB_OUTPUT"
+
+          git fetch
+
+          MAIN_VERSION=$(git show origin/main:sdks/python/friday-logger/src/friday_logger/__about__.py | grep __version__ | grep -oP '(?<=").*(?=")')
+          echo "Main Version : $MAIN_VERSION"
+          echo "MAIN_VERSION=$MAIN_VERSION" >> "$GITHUB_OUTPUT"
+
+          NEW_VERSION=$CURRENT_VERSION_WITHOUT_DEV.dev$GITHUB_RUN_ID
+          echo "New Version : $NEW_VERSION"
+          echo "NEW_VERSION=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Compare versions
+        run: python compare-versions.py ${{ steps.extract_versions.outputs.MAIN_VERSION }} ${{ steps.extract_versions.outputs.CURRENT_VERSION }}
+        working-directory: .github/scripts
+
+      - name: Set hatch version
+        run: |
+          hatch version dev
+          hatch version ${{steps.extract_versions.outputs.NEW_VERSION}}
+        working-directory: sdks/python/friday-logger
+
+      - name: Hatch build
+        run: hatch build
+        working-directory: sdks/python/friday-logger
+
+      - name: Hatch publish
+        run: hatch publish -r test --no-prompt
+        working-directory: sdks/python/friday-logger
+        env:
+          HATCH_INDEX_USER: ${{ secrets.HATCH_INDEX_USER }}
+          HATCH_INDEX_AUTH: ${{ secrets.HATCH_INDEX_AUTH }}
