@@ -14,7 +14,7 @@ export const createLogSchema = z.object({
   namespace: z.string().optional(),
   topic: z.string().optional(),
   level: levelSchema.optional(),
-  data: jsonSchema,
+  data: z.string(),
 })
 
 export const getLogsSchema = z

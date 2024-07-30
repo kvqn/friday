@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "d3b08e11-782d-476c-88b8-b8a36503da43",
+  "id": "8b5bc24c-43ec-476c-85f4-7c5d8d65e862",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "logs": {
@@ -40,7 +40,7 @@
         },
         "data": {
           "name": "data",
-          "type": "json",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -59,7 +59,9 @@
       "compositePrimaryKeys": {
         "logs_id": {
           "name": "logs_id",
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ]
         }
       },
       "uniqueConstraints": {}

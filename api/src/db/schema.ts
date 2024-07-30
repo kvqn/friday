@@ -1,9 +1,9 @@
 import {
   char,
-  json,
   mysqlEnum,
   mysqlTable,
   serial,
+  text,
   timestamp,
 } from "drizzle-orm/mysql-core"
 
@@ -14,6 +14,6 @@ export const logs = mysqlTable("logs", {
   level: mysqlEnum("level", ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"])
     .default("INFO")
     .notNull(),
-  data: json("data"),
+  data: text("data"),
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 })
