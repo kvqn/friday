@@ -10,6 +10,7 @@ on:
 
 jobs:
   publish-python-dev:
+    environment: development
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,14 +21,21 @@ jobs:
         working-directory: sdks/python/friday-logger
       - run: echo ${{ github.sha }}
         working-directory: sdks/python/friday-logger
-      - uses: onyxmueller/build-tag-number@v1
-        name: Generate build number
-        with:
-          token: ${{secrets.GITHUB_TOKEN}}
-      - run: echo new build number $BUILD_NUMBER
-      # - run: hatch version $(hatch version).dev.${{ github.sha }}
-      #   working-directory: sdks/python/friday-logger
-      # - run: hatch build
-      #   working-directory: sdks/python/friday-logger
-      # - run: hatch publish
-      #   working-directory: sdks/python/friday-logger
+      - run: |
+          OLD_VERSION=$(echo $(hatch version) | grep -oP '(\d+\.\d+\.\d+(?:(?:a|b|rc)\d+)?(?:\.post\d+)?)')
+          echo "Old Version : $OLD_VERSION"
+          echo "OLD_VERSION=$OLD_VERSION" >> "$GITHUB_OUTPUT"
+        id: get_old_version
+        working-directory: sdks/python/friday-logger
+      - run: echo "run id $GITHUB_RUN_ID"
+      - run: |
+          hatch version dev
+          hatch version "${{steps.get_old_version.outputs.OLD_VERSION}}.dev$GITHUB_RUN_ID"
+        working-directory: sdks/python/friday-logger
+      - run: hatch build
+        working-directory: sdks/python/friday-logger
+      - run: hatch publish -r test --no-prompt
+        working-directory: sdks/python/friday-logger
+        env:
+          HATCH_INDEX_USER: ${{ secrets.HATCH_INDEX_USER }}
+          HATCH_INDEX_AUTH: ${{ secrets.HATCH_INDEX_AUTH }}
