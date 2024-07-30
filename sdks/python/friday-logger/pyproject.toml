@@ -34,25 +34,29 @@ Issues = "https://github.com/kvqn/friday/issues"
 Source = "https://github.com/kvqn/friday"
 
 [tool.hatch.version]
-path = "src/friday_logger/__about__.py"
+path = "src/friday/__about__.py"
 
 [tool.hatch.envs.types]
 extra-dependencies = [
   "mypy>=1.0.0",
 ]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/friday"]
+
 [tool.hatch.envs.types.scripts]
-check = "mypy --install-types --non-interactive {args:src/friday_logger tests}"
+check = "mypy --install-types --non-interactive {args:src/friday tests}"
 
 [tool.coverage.run]
-source_pkgs = ["friday_logger", "tests"]
+source_pkgs = ["friday", "tests"]
 branch = true
 parallel = true
 omit = [
-  "src/friday_logger/__about__.py",
+  "src/friday/__about__.py",
 ]
 
 [tool.coverage.paths]
-friday_logger = ["src/friday_logger", "*/friday-logger/src/friday_logger"]
+friday = ["src/friday", "*/friday-logger/src/friday"]
 tests = ["tests", "*/friday-logger/tests"]
 
 [tool.coverage.report]
