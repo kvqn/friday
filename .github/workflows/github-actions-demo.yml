@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.9"
-      - run: cd sdks\python\friday-logger
+      - run: cd sdks/python/friday-logger
       - run: pip install -r requirements.txt
       - run: echo ${{ github.sha }}
       - run: hatch version "$(hatch version).dev.${{ github.sha }}
