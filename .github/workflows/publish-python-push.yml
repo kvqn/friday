@@ -1,0 +1,27 @@
+name: Publish Python Package
+run-name: Python New Package Version
+on:
+  push:
+    paths:
+      - sdks/python/friday-logger/**
+    branches:
+      - main
+
+jobs:
+  publish-python-dev:
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+      - run: pip install -r requirements.txt
+        working-directory: sdks/python/friday-logger
+      - run: hatch build
+        working-directory: sdks/python/friday-logger
+      - run: hatch publish -r test --no-prompt
+        working-directory: sdks/python/friday-logger
+        env:
+          HATCH_INDEX_USER: ${{ secrets.HATCH_INDEX_USER }}
+          HATCH_INDEX_AUTH: ${{ secrets.HATCH_INDEX_AUTH }}
