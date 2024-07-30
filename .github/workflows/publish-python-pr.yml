@@ -34,7 +34,7 @@ jobs:
           echo "Old Version : $CURRENT_VERSION_WITHOUT_DEV"
           echo "CURRENT_VERSION_WITHOUT_DEV=$CURRENT_VERSION_WITHOUT_DEV" >> "$GITHUB_OUTPUT"
 
-          MAIN_VERSION=$(git show main:sdks/python/friday-logger/src/friday_logger/__about__.py | grep __version__ | grep -oP '(?<=").*(?=")')
+          MAIN_VERSION=$(git show origin/main:sdks/python/friday-logger/src/friday_logger/__about__.py | grep __version__ | grep -oP '(?<=").*(?=")')
           echo "Main Version : $MAIN_VERSION"
           echo "MAIN_VERSION=$MAIN_VERSION" >> "$GITHUB_OUTPUT"
 
