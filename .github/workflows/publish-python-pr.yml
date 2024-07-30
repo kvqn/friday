@@ -8,7 +8,7 @@ on:
       - main
 
 jobs:
-  publish-python-dev:
+  publish-python-pr:
     environment: development
     runs-on: ubuntu-latest
     steps:
@@ -31,8 +31,10 @@ jobs:
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
 
           CURRENT_VERSION_WITHOUT_DEV=$(echo $CURRENT_VERSION | grep -oP '(\d+\.\d+\.\d+(?:(?:a|b|rc)\d+)?(?:\.post\d+)?)')
-          echo "Old Version : $CURRENT_VERSION_WITHOUT_DEV"
+          echo "Current Version without dev : $CURRENT_VERSION_WITHOUT_DEV"
           echo "CURRENT_VERSION_WITHOUT_DEV=$CURRENT_VERSION_WITHOUT_DEV" >> "$GITHUB_OUTPUT"
+
+          git fetch
 
           MAIN_VERSION=$(git show origin/main:sdks/python/friday-logger/src/friday_logger/__about__.py | grep __version__ | grep -oP '(?<=").*(?=")')
           echo "Main Version : $MAIN_VERSION"
