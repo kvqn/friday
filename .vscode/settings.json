@@ -1,4 +1,5 @@
 {
   "files.eol": "\n",
-  "prettier.configPath": "prettier.config.js"
+  "prettier.configPath": "prettier.config.js",
+  "python.analysis.typeCheckingMode": "basic"
 }
