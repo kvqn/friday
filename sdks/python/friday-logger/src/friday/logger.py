@@ -3,6 +3,7 @@ from typing import Optional
 import requests
 from urllib.parse import urljoin
 
+
 class Handler(logging.Handler):
     def __init__(self, endpoint: str, namespace: str, topic: str):
         super().__init__(logging.DEBUG)
