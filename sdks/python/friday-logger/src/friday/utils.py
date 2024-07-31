@@ -26,5 +26,5 @@ def parse_friday_log(data: dict) -> FridayLogRecord:
         topic=data["topic"],
         level=data["level"],
         data=data["data"],
-        timestamp=datetime_from_string(data["data"]),
+        timestamp=datetime_from_string(data["timestamp"]),
     )
