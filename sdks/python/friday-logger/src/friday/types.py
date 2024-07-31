@@ -1,4 +1,4 @@
-from typing import TypedDict, List, Optional
+from typing import TypedDict, List, Optional, Literal
 from datetime import datetime
 from enum import Enum
 
@@ -8,17 +8,12 @@ class NamespaceAndTopics(TypedDict):
     topic: str
 
 
-class LevelEnum(Enum):
-    DEBUG = "DEBUG"
-    INFO = "INFO"
-    WARNING = "WARNING"
-    ERROR = "ERROR"
-    CRITICAL = "CRITICAL"
+Level = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 
 class QueryInput(TypedDict):
     namespace_and_topics: List[NamespaceAndTopics]
-    level: Optional[LevelEnum]
+    level: Optional[Level]
     before: Optional[datetime]
     after: Optional[datetime]
     limit: Optional[int]
@@ -28,7 +23,7 @@ class FridayLogRecord(TypedDict):
     id: int
     namespace: str
     topic: str
-    level: LevelEnum
+    level: Level
     data: str
     timestamp: datetime
 

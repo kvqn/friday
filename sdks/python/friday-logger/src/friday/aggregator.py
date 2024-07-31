@@ -1,5 +1,5 @@
 from datetime import datetime
-from friday.types import FridayLogRecord, NamespaceAndTopics, LevelEnum
+from friday.types import FridayLogRecord, NamespaceAndTopics, Level
 from friday.utils import datetime_to_string, parse_friday_log
 from typing import List, Optional
 from urllib.parse import urljoin
@@ -14,11 +14,11 @@ class Aggregator:
     # TODO: infer these types from QueryInput
     def query(
         self,
-        namespace_and_topics: List[NamespaceAndTopics],
-        level: Optional[LevelEnum],
-        before: Optional[datetime],
-        after: Optional[datetime],
-        limit: Optional[int],
+        namespace_and_topics: Optional[List[NamespaceAndTopics]] = None,
+        level: Optional[Level] = None,
+        before: Optional[datetime] = None,
+        after: Optional[datetime] = None,
+        limit: Optional[int] = None,
     ) -> List[FridayLogRecord]:
         data = {}
         if namespace_and_topics:
