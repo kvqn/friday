@@ -14,14 +14,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.9"
-      - run: pip install -r requirements.txt
+
+      - name: Install python requirements
+        run: pip install -r requirements.txt
         working-directory: sdks/python/friday-logger
-      - run: hatch build
+
+      - name: Check formatting
+        run: black --check .
         working-directory: sdks/python/friday-logger
-      - run: hatch publish -r main --no-prompt
+
+      - name: Hatch Build
+        run: hatch build
+        working-directory: sdks/python/friday-logger
+
+      - name: Hatch Publish
+        run: hatch publish -r main --no-prompt
         working-directory: sdks/python/friday-logger
         env:
           HATCH_INDEX_USER: ${{ secrets.HATCH_INDEX_USER }}
