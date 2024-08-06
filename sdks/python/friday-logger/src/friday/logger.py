@@ -25,6 +25,7 @@ class Handler(logging.Handler):
 class Logger(logging.Logger):
     def __init__(
         self,
+        name: str,
         endpoint: str,
         namespace: Optional[str] = None,
         topic: Optional[str] = None,
@@ -33,7 +34,7 @@ class Logger(logging.Logger):
         self.namespace = "default" if namespace is None else namespace
         self.topic = "default" if topic is None else topic
         self.handler = Handler(self.endpoint, self.namespace, self.topic)
-        super().__init__(self.topic, logging.DEBUG)
+        super().__init__(name, logging.DEBUG)
         super().addHandler(self.handler)
         self.additional_handlers = []
 
@@ -42,7 +43,7 @@ class Logger(logging.Logger):
         super().addHandler(handler)
 
     def getChild(self, suffix: str) -> "Logger":
-        child = Logger(self.endpoint, self.namespace, self.topic + "_" + self.name)
+        child = Logger(self.endpoint, self.namespace, self.name + "_" + suffix)
         for handler in self.additional_handlers:
             child.addHandler(handler)
         return child
