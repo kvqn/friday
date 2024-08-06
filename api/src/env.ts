@@ -4,6 +4,7 @@ import { z } from "zod"
 export const env = createEnv({
   server: {
     MYSQL_HOST: z.string(),
+    MYSQL_PORT: z.coerce.number(),
     MYSQL_USER: z.string(),
     MYSQL_PASS: z.string(),
     MYSQL_DB: z.string(),

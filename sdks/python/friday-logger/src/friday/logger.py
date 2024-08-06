@@ -34,8 +34,15 @@ class Logger(logging.Logger):
         self.topic = "default" if topic is None else topic
         self.handler = Handler(self.endpoint, self.namespace, self.topic)
         super().__init__(self.topic, logging.DEBUG)
-        self.addHandler(self.handler)
+        super().addHandler(self.handler)
+        self.additional_handlers = []
+
+    def addHandler(self, handler: logging.Handler):
+        self.additional_handlers.append(handler)
+        super().addHandler(handler)
 
     def getChild(self, suffix: str) -> "Logger":
         child = Logger(self.endpoint, self.namespace, self.topic + "_" + self.name)
+        for handler in self.additional_handlers:
+            child.addHandler(handler)
         return child

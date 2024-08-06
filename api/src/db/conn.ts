@@ -7,6 +7,7 @@ export const connection = await mysql.createConnection({
   user: env.MYSQL_USER,
   password: env.MYSQL_PASS,
   database: env.MYSQL_DB,
+  port: env.MYSQL_PORT
 })
 
 export const db = drizzle(connection)
