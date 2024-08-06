@@ -43,7 +43,9 @@ class Logger(logging.Logger):
         super().addHandler(handler)
 
     def getChild(self, suffix: str) -> "Logger":
-        child = Logger(self.endpoint, self.namespace, self.name + "_" + suffix)
+        child = Logger(
+            self.name + "_" + suffix, self.endpoint, self.namespace, self.topic
+        )
         for handler in self.additional_handlers:
             child.addHandler(handler)
         return child
