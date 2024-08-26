@@ -1,0 +1,26 @@
+from dotenv import load_dotenv
+from os import getenv
+
+load_dotenv()
+
+_MARIA_USER = getenv("MARIA_USER")
+assert _MARIA_USER
+MARIA_USER = _MARIA_USER
+
+_MARIA_HOST = getenv("MARIA_HOST")
+assert _MARIA_HOST
+MARIA_HOST = _MARIA_HOST
+
+_MARIA_PASS = getenv("MARIA_PASS")
+assert _MARIA_PASS
+MARIA_PASS = _MARIA_PASS
+
+_MARIA_PORT = getenv("MARIA_PORT")
+assert _MARIA_PORT and int(_MARIA_PORT)
+MARIA_PORT = int(_MARIA_PORT)
+
+_MARIA_DATABASE = getenv("MARIA_DATABASE")
+assert _MARIA_DATABASE
+MARIA_DATABASE = _MARIA_DATABASE
+
+__all__ = ["MARIA_USER", "MARIA_HOST", "MARIA_PASS", "MARIA_PORT", "MARIA_DATABASE"]

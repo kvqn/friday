@@ -1,9 +1,14 @@
 from datetime import datetime
-from friday.types import FridayLogRecord, NamespaceAndTopics, Level
-from friday.utils import datetime_to_string, parse_friday_log
+from friday.types import (
+    Log,
+    NamespaceAndTopic,
+    Level,
+    GetLogsRequest,
+    Order,
+    LogsResponse,
+)
 from typing import List, Optional
 from urllib.parse import urljoin
-import json
 import requests
 
 
@@ -14,28 +19,32 @@ class Aggregator:
     # TODO: infer these types from QueryInput
     def query(
         self,
-        namespace_and_topics: Optional[List[NamespaceAndTopics]] = None,
+        limit: int = 1,
+        offset: int = 0,
+        namespaces: list[str] = [],
+        topics: list[str] = [],
+        namespaces_and_topics: list[NamespaceAndTopic] = [],
         level: Optional[Level] = None,
         before: Optional[datetime] = None,
         after: Optional[datetime] = None,
-        limit: Optional[int] = None,
-    ) -> List[FridayLogRecord]:
-        data = {}
-        if namespace_and_topics:
-            data["namespacesAndTopics"] = namespace_and_topics
-        if level:
-            data["level"] = level
-        if before:
-            data["before"] = datetime_to_string(before)
-        if after:
-            data["after"] = datetime_to_string(after)
-        if limit:
-            data["limit"] = limit
+        order: Order = Order.DESC,
+    ) -> List[Log]:
 
-        resp = requests.get(
-            urljoin(self.friday_endpoint, "getLogs"), params={"input": json.dumps(data)}
+        req_body = GetLogsRequest(
+            limit=limit,
+            offset=offset,
+            namespaces=namespaces,
+            topics=topics,
+            namespaces_and_topics=namespaces_and_topics,
+            level=level,
+            before=before,
+            after=after,
+            order=order,
         )
 
-        data = resp.json()["result"]["data"]
-        parsed_data = [parse_friday_log(log) for log in data]
+        resp = requests.get(urljoin(self.friday_endpoint, "logs"), json=dict(req_body))
+
+        json = resp.json()
+        data = LogsResponse(**json)
+        parsed_data = [log for log in data.logs]
         return parsed_data

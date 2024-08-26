@@ -2,6 +2,7 @@ import logging
 from typing import Optional
 import requests
 from urllib.parse import urljoin
+from friday.types import PutLogsRequest
 
 
 class Handler(logging.Handler):
@@ -12,14 +13,14 @@ class Handler(logging.Handler):
         self.topic = topic
 
     def emit(self, record: logging.LogRecord):
-        post_endpoint = urljoin(self.endpoint, "createLog")
-        data = {
-            "namespace": self.namespace,
-            "topic": self.topic,
-            "data": record.getMessage(),
-            "level": record.levelname,
-        }
-        requests.post(post_endpoint, json=data)
+        post_endpoint = urljoin(self.endpoint, "logs")
+        req_body = PutLogsRequest(
+            namespace=self.namespace,
+            topic=self.topic,
+            data=record.getMessage(),
+            level=record.levelname,
+        )
+        requests.put(post_endpoint, json=dict(req_body))
 
 
 class Logger(logging.Logger):

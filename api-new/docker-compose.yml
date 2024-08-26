@@ -1,0 +1,10 @@
+services:
+  friday-api:
+    image: friday-api
+    container_name: friday-api
+    environment:
+      - MARIA_DATABASE=friday
+      - MARIA_USER=kvqn
+      - MARIA_PASS=kvqn
+      - MARIA_HOST=172.17.0.1
+      - MARIA_PORT=3306
