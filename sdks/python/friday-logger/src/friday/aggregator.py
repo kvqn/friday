@@ -24,7 +24,7 @@ class Aggregator:
         namespaces: list[str] = [],
         topics: list[str] = [],
         namespaces_and_topics: list[NamespaceAndTopic] = [],
-        level: Optional[Level] = None,
+        levels: list[Level] = [],
         before: Optional[datetime] = None,
         after: Optional[datetime] = None,
         order: Order = Order.DESC,
@@ -36,13 +36,14 @@ class Aggregator:
             namespaces=namespaces,
             topics=topics,
             namespaces_and_topics=namespaces_and_topics,
-            level=level,
+            level=levels,
             before=before,
             after=after,
             order=order,
         )
 
-        resp = requests.get(urljoin(self.friday_endpoint, "logs"), json=dict(req_body))
+        resp = requests.get(urljoin(self.friday_endpoint,
+                            "logs"), params=dict(req_body))
 
         json = resp.json()
         data = LogsResponse(**json)

@@ -37,18 +37,6 @@ class LogsResponse(BaseModel):
     logs: list[Log]
 
 
-class GetLogsRequest(BaseModel):
-    limit: int = 1
-    offset: int = 0
-    namespaces: list[str] = []
-    topics: list[str] = []
-    namespaces_and_topics: list[NamespaceAndTopic] = []
-    level: Optional[Level] = None
-    before: Optional[datetime] = None
-    after: Optional[datetime] = None
-    order: Order = Order.DESC
-
-
 def _and(*conditions: str | None):
     filtered = [i for i in conditions if i]
     if not filtered:
@@ -71,37 +59,39 @@ def _join(*parts: str | None):
 
 
 @app.get("/logs")
-def get_logs(request: GetLogsRequest):
+def get_logs(
+    limit: int = 1,
+    offset: int = 0,
+    namespaces: list[str] = [],
+    topics: list[str] = [],
+    namespaces_and_topics: list[NamespaceAndTopic] = [],
+    levels: list[Level] = [],
+    before: Optional[datetime] = None,
+    after: Optional[datetime] = None,
+    order: Order = Order.DESC,
+):
     conditions = _and(
-        f"level = '{request.level.value}'" if request.level else None,
-        _or(*(f"namespace = '{namespace}'" for namespace in request.namespaces)),
-        _or(*(f"topic = '{topic}'" for topic in request.topics)),
+        _or(*(f"level = '{level.value}'" for level in levels)),
+        _or(*(f"namespace = '{namespace}'" for namespace in namespaces)),
+        _or(*(f"topic = '{topic}'" for topic in topics)),
         _or(
             *(
                 _and(
                     f"namespace = '{nt.namespace}'",
                     f"topic = '{nt.topic}'",
                 )
-                for nt in request.namespaces_and_topics
+                for nt in namespaces_and_topics
             )
         ),
-        (
-            f"timestamp < '{request.before.strftime('%Y-%m-%d %H:%M:%S')}'"
-            if request.before
-            else None
-        ),
-        (
-            f"timestamp > '{request.after.strftime('%Y-%m-%d %H:%M:%S')}'"
-            if request.after
-            else None
-        ),
+        (f"timestamp < '{before.strftime('%Y-%m-%d %H:%M:%S')}'" if before else None),
+        (f"timestamp > '{after.strftime('%Y-%m-%d %H:%M:%S')}'" if after else None),
     )
     query = _join(
         "SELECT * FROM logs",
         f"WHERE {conditions}" if conditions else None,
-        f"ORDER BY timestamp {request.order.value}",
-        f"LIMIT {request.limit}",
-        f"OFFSET {request.offset}",
+        f"ORDER BY timestamp {order.value}",
+        f"LIMIT {limit}",
+        f"OFFSET {offset}",
     )
 
     assert query is not None

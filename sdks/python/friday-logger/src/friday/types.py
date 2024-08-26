@@ -41,7 +41,7 @@ class GetLogsRequest(BaseModel):
     namespaces: list[str] = []
     topics: list[str] = []
     namespaces_and_topics: list[NamespaceAndTopic] = []
-    level: Optional[Level] = None
+    levels: list[Level] = []
     before: Optional[datetime] = None
     after: Optional[datetime] = None
     order: Order = Order.DESC

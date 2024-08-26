@@ -1,0 +1,32 @@
+{
+  "name": "friday-logger",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "Friday API Wrapper",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kvqn/friday.git"
+  },
+  "author": "kvqn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kvqn/friday/issues"
+  },
+  "homepage": "https://github.com/kvqn/friday#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "@types/eslint": "^8.56.10",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4"
+  },
+  "types": "dist/index.d.ts"
+}
