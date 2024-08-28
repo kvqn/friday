@@ -5,8 +5,7 @@ EXPOSE 8000
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-
 COPY api api
 
-ENTRYPOINT ["fastapi", "dev", "api", "--host", "0.0.0.0"]
+ENTRYPOINT ["fastapi", "run", "api", "--host", "0.0.0.0"]
 
