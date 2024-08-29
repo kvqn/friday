@@ -11,7 +11,7 @@
     "url": "https://github.com/kvqn/friday/issues"
   },
   "homepage": "https://github.com/kvqn/friday#readme",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
