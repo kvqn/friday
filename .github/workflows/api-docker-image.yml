@@ -5,6 +5,7 @@ on:
       - api/**
     branches:
       - main
+  workflow_dispatch: {}
 
 jobs:
   api-docker-image:
