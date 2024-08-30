@@ -1,7 +1,10 @@
-import { ThemeSwitch } from "./theme-switch";
+import { ThemeSwitch } from "./theme-switch"
 
 export function Navbar() {
-  return <div>navbar
-    <ThemeSwitch />
-  </div>
+  return (
+    <div>
+      navbar
+      <ThemeSwitch />
+    </div>
+  )
 }

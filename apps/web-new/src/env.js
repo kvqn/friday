@@ -3,12 +3,11 @@ import { z } from "zod"
 
 export const env = createEnv({
   server: {
-    FRIDAY_ENDPOINT: z.string().url()
+    FRIDAY_ENDPOINT: z.string().url(),
   },
-  client: {
-  },
+  client: {},
   runtimeEnv: {
-    FRIDAY_ENDPOINT: process.env.FRIDAY_ENDPOINT
+    FRIDAY_ENDPOINT: process.env.FRIDAY_ENDPOINT,
   },
   emptyStringAsUndefined: true,
 })

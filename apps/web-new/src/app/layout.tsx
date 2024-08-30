@@ -1,9 +1,10 @@
-import { Navbar } from "@/components/navbar"
 import "@/styles/globals.css"
 
 import { GeistSans } from "geist/font/sans"
-import { type Metadata } from "next"
+import { GeistMono } from "geist/font/mono"
+import type { Metadata } from "next"
 import { ThemeProvider } from "next-themes"
+import { FiltersProvider } from "./_components/filters"
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -15,15 +16,18 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
-      <body>
+    <html
+      lang="en"
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="flex min-h-screen flex-col font-geist">
         <ThemeProvider
           themes={["light", "dark"]}
           defaultTheme="dark"
           attribute="class"
         >
-          <Navbar />
-          {children}
+          <FiltersProvider>{children}</FiltersProvider>
         </ThemeProvider>
       </body>
     </html>
