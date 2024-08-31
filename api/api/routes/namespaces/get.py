@@ -9,7 +9,7 @@ class Response(BaseModel):
 def get() -> Response:
     cur = get_cursor()
     try:
-        cur.execute("SELECT DISTINCT namespace from logs")
+        cur.execute("SELECT name from namespace")
         return Response(namespaces=[row[0] for row in cur.fetchall()])
     finally:
         cur.close()

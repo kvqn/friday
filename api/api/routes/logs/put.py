@@ -13,7 +13,13 @@ class Request(BaseModel):
 def put(log: Request) -> Literal["success"]:
     cur = get_cursor()
     try:
-        query = f"INSERT INTO logs (namespace, topic, level, data) VALUES ('{log.namespace}', '{log.topic}', '{log.level}', '{log.data}')"
+        queries = [
+            f"INSERT INTO namespace (name) VALUES ('{log.namespace}') on duplicate key update id=id",
+            f"INSERT INTO topic (name) VALUES ('{log.topic}') on duplicate key update id=id",
+            f"INSERT INTO namespace_topic (namespace_id, topic_id) VALUES ((SELECT id FROM namespace WHERE name='{log.namespace}'), (SELECT id FROM topic WHERE name='{log.topic}')) on duplicate key update id=id",
+            f"INSERT INTO log (namespace_topic_id, level, data) VALUES ((SELECT id FROM namespace_topic WHERE namespace_id=(SELECT id FROM namespace WHERE name='{log.namespace}') AND topic_id=(SELECT id FROM topic WHERE name='{log.topic}')), '{log.level}', '{log.data}')",
+        ]
+        query = " ; ".join(queries)
         cur.execute(query)
     finally:
         cur.close()

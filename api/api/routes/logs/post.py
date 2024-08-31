@@ -36,16 +36,36 @@ def post(
             if req.after
             else None
         ),
-        f"namespace = '{req.namespace}'" if req.namespace else None,
-        _or(*(f"topic = '{topic}'" for topic in req.topics)),
+        (
+            "namespace_topic_id in (select id from namespace_topic where {})".format(
+                _and(
+                    "namespace_id in (select id from namespace where name = {})".format(
+                        "'" + req.namespace + "'"
+                    ),
+                    (
+                        "topic_id in (select id from topic where name in ({}))".format(
+                            ", ".join("'" + topic + "'" for topic in req.topics)
+                        )
+                        if req.topics
+                        else None
+                    ),
+                )
+            )
+            if req.namespace
+            else None
+        ),
     )
     query = _join(
-        "SELECT * FROM logs",
+        "SELECT * FROM log",
         f"WHERE {conditions}" if conditions else None,
         f"ORDER BY timestamp {req.order.value}",
         f"LIMIT {req.limit}",
         f"OFFSET {req.offset}",
     )
+
+    query = f"""
+    with logs as ({query}) select logs.id as id, logs.timestamp as timestamp, namespace.name as namespace, topic.name as topic, logs.level as level, logs.data as data from logs inner join namespace_topic on logs.namespace_topic_id = namespace_topic.id inner join namespace on namespace_topic.namespace_id = namespace.id inner join topic on namespace_topic.topic_id = topic.id;
+    """
 
     print(query)
 
@@ -62,11 +82,11 @@ def post(
             logs=[
                 Log(
                     id=row[0],
-                    namespace=row[1],
-                    topic=row[2],
-                    level=Level(row[3]),
-                    data=row[4],
-                    timestamp=row[5],
+                    timestamp=row[1],
+                    namespace=row[2],
+                    topic=row[3],
+                    level=Level(row[4]),
+                    data=row[5],
                 )
                 for row in result
             ]

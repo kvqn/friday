@@ -30,11 +30,27 @@ def post(req: Request) -> Response:
             if req.after
             else None
         ),
-        f"namespace = '{req.namespace}'" if req.namespace else None,
-        _or(*(f"topic = '{topic}'" for topic in req.topics)),
+        (
+            "namespace_topic_id in (select id from namespace_topic where {})".format(
+                _and(
+                    "namespace_id in (select id from namespace where name = {})".format(
+                        "'" + req.namespace + "'"
+                    ),
+                    (
+                        "topic_id in (select id from topic where name in ({}))".format(
+                            ", ".join("'" + topic + "'" for topic in req.topics)
+                        )
+                        if req.topics
+                        else None
+                    ),
+                )
+            )
+            if req.namespace
+            else None
+        ),
     )
     query = _join(
-        "SELECT count(*) FROM logs",
+        "SELECT count(*) FROM log",
         f"WHERE {conditions}" if conditions else None,
     )
 

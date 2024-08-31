@@ -8,7 +8,7 @@ class Response(BaseModel):
 
 def get(namespace: str) -> Response:
     cur = get_cursor()
-    query = f"SELECT DISTINCT topic from logs where namespace = '{namespace}'"
+    query = f"SELECT name from topic where id in (select topic_id from namespace_topic where namespace_id = (select id from namespace where name = '{namespace}'))"
     try:
         cur.execute(query)
         return Response(topics=[row[0] for row in cur.fetchall()])
