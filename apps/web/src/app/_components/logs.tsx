@@ -17,7 +17,6 @@ export function Logs() {
     setLoading(true)
     void (async () => {
       const _logs = await aggregator.logs(query)
-      console.log("logs", _logs)
       setLogs(_logs)
       setLoading(false)
     })()
@@ -26,7 +25,7 @@ export function Logs() {
   if (loading) return <div>Loading...</div>
 
   return (
-    <div className="flex w-full flex-grow flex-col gap-4">
+    <div className="flex h-[calc(100vh-20rem)] w-full flex-grow flex-col gap-4 overflow-scroll px-4 lg:h-screen">
       {logs.map((log) => (
         <Log key={log.id} log={log} />
       ))}

@@ -4,7 +4,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from "./ui/button"
-import { ChevronsUpDown, CircleCheck } from "lucide-react"
+import { ChevronsUpDown, CircleCheck, Square, SquareCheck } from "lucide-react"
 
 export function MultiSelect({
   title,
@@ -28,7 +28,10 @@ export function MultiSelect({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button className="flex items-center justify-between">
+        <Button
+          className="flex items-center justify-between"
+          variant={"secondary"}
+        >
           {title} {selected.length > 0 ? `(${selected.length})` : `(All)`}
           <ChevronsUpDown className="h-4 w-4" />
         </Button>
@@ -41,8 +44,10 @@ export function MultiSelect({
             onClick={() => toggleSelected(option.value)}
           >
             {selected.includes(option.value) ? (
-              <CircleCheck className="h-4 w-4" />
-            ) : null}
+              <SquareCheck className="h-4 w-4" />
+            ) : (
+              <Square className="h-4 w-4" />
+            )}
             <p className="ml-auto">{option.name}</p>
           </div>
         ))}

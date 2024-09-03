@@ -15,21 +15,32 @@ export const metadata: Metadata = {
 }
 
 export default async function Page() {
+  const options = <Filters />
+  const page = (
+    <div className="flex flex-grow flex-col items-center gap-4">
+      <LogsPagination />
+      <Logs />
+    </div>
+  )
+
   return (
-    <ResizablePanelGroup direction="horizontal">
-      <ResizablePanel defaultSize={25}>
-        <div className="h-screen">
-          <Filters />
-        </div>
-      </ResizablePanel>
-      <ResizableHandle />
-      <ResizablePanel defaultSize={75}>
-        <div className="flex flex-grow flex-col items-center p-4">
-          <LogsPagination />
-          <Logs />
+    <>
+      <div className="flex h-screen flex-col overflow-hidden p-4 lg:hidden">
+        {page}
+        <div className="flex w-full items-center justify-center gap-4 bg-background pt-4">
           <FiltersDrawer />
         </div>
-      </ResizablePanel>
-    </ResizablePanelGroup>
+      </div>
+
+      <div className="hidden lg:block">
+        <ResizablePanelGroup direction="horizontal">
+          <ResizablePanel defaultSize={25}>
+            <div className="block h-screen">{options}</div>
+          </ResizablePanel>
+          <ResizableHandle />
+          <ResizablePanel defaultSize={75}>{page}</ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
+    </>
   )
 }

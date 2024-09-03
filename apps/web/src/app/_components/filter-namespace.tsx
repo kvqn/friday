@@ -34,13 +34,20 @@ export function NamespaceFilter() {
         <Select
           value={query.namespace}
           onValueChange={(value) => {
-            setQuery({
-              ...query,
-              namespace: value,
-            })
+            if (value === "_all_") {
+              setQuery({
+                ...query,
+                namespace: undefined,
+              })
+            } else {
+              setQuery({
+                ...query,
+                namespace: value,
+              })
+            }
           }}
         >
-          <SelectTrigger className="">
+          <SelectTrigger className="bg-secondary">
             <SelectValue
               id="namespace"
               placeholder="All Namespaces"
@@ -48,6 +55,7 @@ export function NamespaceFilter() {
             />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="_all_">All Namespaces</SelectItem>
             {namespaces.map((namespace) => (
               <SelectItem key={namespace} value={namespace}>
                 {namespace}

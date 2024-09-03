@@ -17,7 +17,7 @@ export function FiltersDrawer() {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button className="block lg:hidden">Filters</Button>
+        <Button className="block w-1/2 lg:hidden">Filters</Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
@@ -28,9 +28,8 @@ export function FiltersDrawer() {
         </DrawerHeader>
         <Filters />
         <DrawerFooter>
-          <Button>Submit</Button>
           <DrawerClose>
-            <Button variant="outline">Cancel</Button>
+            <Button className="w-full">Done</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

@@ -19,8 +19,6 @@ import { TopicsFilter } from "./filter-topics"
 const FiltersContext = createContext<{
   query: QueryType
   setQuery: Dispatch<SetStateAction<QueryType>>
-  page: number
-  setPage: Dispatch<SetStateAction<number>>
 } | null>(null)
 
 export function useFilters() {
@@ -33,13 +31,11 @@ export function useFilters() {
 
 export function FiltersProvider({ children }: { children: React.ReactNode }) {
   const [query, setQuery] = useState<QueryType>({
-    limit: 50,
+    limit: 10,
   })
 
-  const [page, setPage] = useState(1)
-
   return (
-    <FiltersContext.Provider value={{ query, setQuery, page, setPage }}>
+    <FiltersContext.Provider value={{ query, setQuery }}>
       {children}
     </FiltersContext.Provider>
   )

@@ -26,7 +26,7 @@ export function PerPage() {
           }))
         }}
       >
-        <SelectTrigger id="per-page">
+        <SelectTrigger id="per-page" className="w-20">
           <SelectValue placeholder="10" />
         </SelectTrigger>
         <SelectContent>

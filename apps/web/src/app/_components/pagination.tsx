@@ -22,7 +22,7 @@ function max(a: number, b: number) {
 }
 
 export function LogsPagination() {
-  const { page, setPage, query } = useFilters()
+  const { query, setQuery } = useFilters()
   const [count, setCount] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
 
@@ -33,6 +33,12 @@ export function LogsPagination() {
       setTotalPages(Math.ceil(_count / (query.limit ?? 10)))
     })()
   }, [query])
+
+  const [page, setPage] = useState(1)
+
+  useEffect(() => {
+    setQuery((prev) => ({ ...prev, offset: (page - 1) * (prev.limit ?? 10) }))
+  }, [page, setQuery])
 
   return (
     <Pagination>
@@ -45,47 +51,11 @@ export function LogsPagination() {
             }}
           />
         </PaginationItem>
-        {page > 2 ? (
-          <>
-            <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            {page > 3 && (
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-            )}
-          </>
-        ) : null}
-        {Array.from({ length: min(1, page - 1) }).map((_, i) => (
-          <PaginationItem key={page - min(1, page - 1) + i}>
-            <PaginationLink href="#">
-              {page - min(1, page - 1) + i}
-            </PaginationLink>
-          </PaginationItem>
-        ))}
         <PaginationItem>
-          <PaginationLink href="#" className="border">
-            {page}
-          </PaginationLink>
+          <p className="font-geist-mono">
+            Page {page} of {totalPages}
+          </p>
         </PaginationItem>
-        {Array.from({ length: min(1, totalPages - page) }).map((_, i) => (
-          <PaginationItem key={page + i + 1}>
-            <PaginationLink href="#">{page + i + 1}</PaginationLink>
-          </PaginationItem>
-        ))}
-        {totalPages - page > 2 ? (
-          <>
-            {totalPages - page > 3 && (
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-            )}
-            <PaginationItem>
-              <PaginationLink href="#">{totalPages}</PaginationLink>
-            </PaginationItem>
-          </>
-        ) : null}
         <PaginationItem>
           <PaginationNext
             href="#"
