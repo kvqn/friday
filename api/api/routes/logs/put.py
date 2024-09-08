@@ -23,4 +23,4 @@ def put(log: Request) -> Literal["success"]:
             cur.execute(query)
     finally:
         cur.close()
-    return "success"
+        return "success"
