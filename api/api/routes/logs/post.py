@@ -58,7 +58,7 @@ def post(
     query = _join(
         "SELECT * FROM log",
         f"WHERE {conditions}" if conditions else None,
-        f"ORDER BY timestamp {req.order.value}",
+        f"ORDER BY id {req.order.value}",
         f"LIMIT {req.limit}",
         f"OFFSET {req.offset}",
     )
