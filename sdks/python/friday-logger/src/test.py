@@ -1,7 +1,7 @@
 from friday import Logger, Aggregator
 
-# ENDPOINT = "http://localhost:5000"
-ENDPOINT = "https://friday-api.guneet-homelab.duckdns.org"
+ENDPOINT = "http://localhost:5001"
+# ENDPOINT = "https://friday-api.guneet-homelab.duckdns.org"
 logger = Logger(
     "test-logger",
     ENDPOINT,

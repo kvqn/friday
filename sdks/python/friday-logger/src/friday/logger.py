@@ -13,14 +13,14 @@ class Handler(logging.Handler):
         self.topic = topic
 
     def emit(self, record: logging.LogRecord):
-        post_endpoint = urljoin(self.endpoint, "logs")
+        put_endpoint = urljoin(self.endpoint, "logs")
         req_body = PutLogsRequest(
             namespace=self.namespace,
             topic=self.topic,
             data=record.getMessage(),
             level=record.levelname,
         )
-        requests.put(post_endpoint, json=dict(req_body))
+        requests.put(put_endpoint, json=dict(req_body))
 
 
 class Logger(logging.Logger):

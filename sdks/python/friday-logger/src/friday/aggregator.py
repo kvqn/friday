@@ -36,14 +36,13 @@ class Aggregator:
             namespaces=namespaces,
             topics=topics,
             namespaces_and_topics=namespaces_and_topics,
-            level=levels,
+            levels=levels,
             before=before,
             after=after,
             order=order,
         )
 
-        resp = requests.get(urljoin(self.friday_endpoint,
-                            "logs"), params=dict(req_body))
+        resp = requests.post(urljoin(self.friday_endpoint, "logs"), json=dict(req_body))
 
         json = resp.json()
         data = LogsResponse(**json)
