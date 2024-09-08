@@ -38,9 +38,8 @@ class LogsResponse(BaseModel):
 class GetLogsRequest(BaseModel):
     limit: int = 1
     offset: int = 0
-    namespaces: list[str] = []
+    namespace: Optional[str] = None
     topics: list[str] = []
-    namespaces_and_topics: list[NamespaceAndTopic] = []
     levels: list[Level] = []
     before: Optional[datetime] = None
     after: Optional[datetime] = None
