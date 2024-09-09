@@ -1,10 +1,14 @@
 import requests
+import time
 
 
 def request_with_retry(method: str, url: str, **kwargs):
-    for _ in range(3):
+    i = 1
+    while True:
         try:
             return requests.request(method, url, **kwargs)
         except:
+            print(f"Request attempt {i} failed, retrying...")
+            i += 1
+            time.sleep(0.1 * i)
             continue
-    raise requests.RequestException("Failed to send request after 3 retries")
