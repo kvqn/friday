@@ -10,6 +10,7 @@ from friday.types import (
 from typing import List, Optional
 from urllib.parse import urljoin
 import requests
+from friday._utils import request_with_retry
 
 
 class Aggregator:
@@ -40,7 +41,9 @@ class Aggregator:
             order=order,
         )
 
-        resp = requests.post(urljoin(self.friday_endpoint, "logs"), json=dict(req_body))
+        resp = request_with_retry(
+            "POST", urljoin(self.friday_endpoint, "logs"), json=dict(req_body)
+        )
 
         json = resp.json()
         data = LogsResponse(**json)

@@ -3,6 +3,7 @@ from typing import Optional
 import requests
 from urllib.parse import urljoin
 from friday.types import PutLogsRequest
+from friday._utils import request_with_retry
 
 
 class Handler(logging.Handler):
@@ -20,7 +21,7 @@ class Handler(logging.Handler):
             data=record.getMessage(),
             level=record.levelname,
         )
-        requests.put(put_endpoint, json=dict(req_body))
+        request_with_retry("PUT", put_endpoint, json=dict(req_body))
 
 
 class Logger(logging.Logger):
