@@ -1,4 +1,4 @@
-from api.common import *
+from api.common import Level, _and, _or, _join
 from typing import Optional
 from datetime import datetime
 from api.db import get_connection
@@ -59,8 +59,6 @@ def post(req: Request) -> Response:
     conn = get_connection()
     cur = conn.cursor()
     try:
-        print("Got cursor")
-        print("Running query", query)
         cur.execute(query)
         result = cur.fetchall()
 

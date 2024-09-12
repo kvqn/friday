@@ -7,5 +7,5 @@ RUN pip install -r requirements.txt
 
 COPY api api
 
-ENTRYPOINT ["fastapi", "run", "api", "--host", "0.0.0.0"]
+ENTRYPOINT ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "error"]
 
