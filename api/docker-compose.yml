@@ -1,0 +1,30 @@
+services:
+  mariadb:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - type: bind
+        source: ../db.sql
+        target : /docker-entrypoint-initdb.d/db.sql
+        read_only: true
+    healthcheck:
+        test: [ "CMD", "healthcheck.sh", "--su-mysql", "--connect", "--innodb_initialized" ]
+        start_period: 1m
+        start_interval: 10s
+        interval: 1m
+        timeout: 5s
+        retries: 3
+  api:
+    build: .
+    environment:
+      MARIA_HOST: mariadb
+      MARIA_PORT: 3306
+      MARIA_USER: root
+      MARIA_PASS: root
+      MARIA_DATABASE: friday
+    depends_on:
+      mariadb: 
+        condition: service_healthy
+    links:
+    - mariadb
