@@ -1,5 +1,6 @@
-import requests
 import time
+
+import requests
 
 
 def request_with_retry(method: str, url: str, **kwargs):
@@ -7,7 +8,7 @@ def request_with_retry(method: str, url: str, **kwargs):
     while True:
         try:
             return requests.request(method, url, **kwargs)
-        except:
+        except Exception:
             print(f"Request attempt {i} failed, retrying...")
             i += 1
             time.sleep(0.1 * i)

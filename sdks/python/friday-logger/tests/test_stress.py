@@ -1,6 +1,7 @@
-from friday import Logger, Aggregator
-from tests.env import FRIDAY_ENDPOINT
 import concurrent.futures
+
+from friday import Aggregator, Logger
+from tests.env import FRIDAY_ENDPOINT
 
 aggregator = Aggregator(endpoint=FRIDAY_ENDPOINT)
 

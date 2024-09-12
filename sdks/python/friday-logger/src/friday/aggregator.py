@@ -1,13 +1,8 @@
 from datetime import datetime
-from friday.types import (
-    Log,
-    Level,
-    GetLogsRequest,
-    Order,
-    LogsResponse,
-)
 from typing import List, Optional
+
 from friday._utils import request_with_retry
+from friday.types import GetLogsRequest, Level, Log, LogsResponse, Order
 
 
 def urljoin(*args):

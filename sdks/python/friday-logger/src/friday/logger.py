@@ -1,8 +1,9 @@
 import logging
 from typing import Optional
 from urllib.parse import urljoin
-from friday.types import PutLogsRequest
+
 from friday._utils import request_with_retry
+from friday.types import PutLogsRequest
 
 
 class Handler(logging.Handler):

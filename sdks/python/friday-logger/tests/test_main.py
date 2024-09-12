@@ -1,7 +1,9 @@
-from friday import Logger, Aggregator
-from tests.env import FRIDAY_ENDPOINT
 from random import randint
+
 import pytest
+
+from friday import Aggregator, Logger
+from tests.env import FRIDAY_ENDPOINT
 
 print("FRIDAY_ENDPOINT", FRIDAY_ENDPOINT)
 
