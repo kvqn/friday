@@ -13,7 +13,6 @@ type PutLog = {
   data: string
 }
 
-
 type Logger = {
   debug(data: LogData): Promise<void>
   info(data: LogData): Promise<void>
@@ -39,7 +38,7 @@ export function createLogger(options: LoggerOptions): Logger {
 
     await fetch(options.endpoint + "/logs", {
       method: "PUT",
-      headers: {'Content-Type': 'application/json'},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     })
     console.log("log sent")

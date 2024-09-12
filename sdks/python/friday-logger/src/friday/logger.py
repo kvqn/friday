@@ -61,7 +61,6 @@ class Logger(logging.Logger):
 
 
 class PrettyFormatter(logging.Formatter):
-
     def __init__(self, style_level: bool = True, style_message: bool = True):
         super().__init__()
 

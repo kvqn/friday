@@ -7,17 +7,24 @@ aggregator = Aggregator(endpoint=FRIDAY_ENDPOINT)
 
 def _test(logs: int, workers: int):
     def func():
-        logger = Logger(name="stress-test", endpoint=FRIDAY_ENDPOINT,
-                        namespace="stress-test", topic=f"{logs}_{workers}")
+        logger = Logger(
+            name="stress-test",
+            endpoint=FRIDAY_ENDPOINT,
+            namespace="stress-test",
+            topic=f"{logs}_{workers}",
+        )
         with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
             executor.map(
                 lambda i: logger.debug(f"test_{logs}_{workers}: {i}"),
                 range(logs),
-                timeout=1
+                timeout=1,
             )
             executor.shutdown()
-        assert aggregator.count(namespace="stress-test",
-                                topics=[f"{logs}_{workers}"]) == logs
+        assert (
+            aggregator.count(namespace="stress-test", topics=[f"{logs}_{workers}"])
+            == logs
+        )
+
     return func
 
 

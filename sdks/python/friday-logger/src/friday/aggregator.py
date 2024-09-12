@@ -30,7 +30,6 @@ class Aggregator:
         after: Optional[datetime] = None,
         order: Order = Order.DESC,
     ) -> List[Log]:
-
         req_body = GetLogsRequest(
             limit=limit,
             offset=offset,
@@ -59,7 +58,6 @@ class Aggregator:
         before: Optional[datetime] = None,
         after: Optional[datetime] = None,
     ) -> List[Log]:
-
         req_body = {
             "namespace": namespace,
             "topics": topics,
