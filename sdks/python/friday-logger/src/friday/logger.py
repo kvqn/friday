@@ -1,6 +1,5 @@
 import logging
 from typing import Optional
-import requests
 from urllib.parse import urljoin
 from friday.types import PutLogsRequest
 from friday._utils import request_with_retry

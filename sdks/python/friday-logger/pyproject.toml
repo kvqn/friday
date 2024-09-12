@@ -25,7 +25,8 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "requests"
+  "requests",
+  "pydantic"
 ]
 
 [project.urls]
@@ -74,3 +75,18 @@ url = "https://test.pypi.org/legacy/"
 
 [publish.index]
 disable = true
+
+# --- Testing Configuration ---
+
+[tool.hatch.envs.hatch-test]
+extra-dependencies = [
+  "pytest-timeout",
+]
+extra-args = [
+  "-vv",
+  "--durations=0",
+]
+
+[pytest]
+pythonpath = "src"
+
