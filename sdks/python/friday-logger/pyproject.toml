@@ -90,3 +90,5 @@ extra-args = [
 [pytest]
 pythonpath = "src"
 
+[tool.ruff.lint]
+select = ["I001"]
