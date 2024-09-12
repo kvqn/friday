@@ -73,5 +73,4 @@ class Aggregator:
         )
 
         json = resp.json()
-        print(json)
         return json["count"]
