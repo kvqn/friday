@@ -1,2 +1,3 @@
 mariadb
 fastapi[standard]
+ruff
