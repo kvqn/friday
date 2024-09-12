@@ -2,8 +2,7 @@ from time import sleep
 
 import mariadb
 
-from api.env import (MARIA_DATABASE, MARIA_HOST, MARIA_PASS, MARIA_PORT,
-                     MARIA_USER)
+from api.env import MARIA_DATABASE, MARIA_HOST, MARIA_PASS, MARIA_PORT, MARIA_USER
 
 pool = mariadb.ConnectionPool(
     host=MARIA_HOST,
