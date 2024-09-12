@@ -16,7 +16,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.11
-      - run: pip install ruff
+      - run: pip install ruff isort
+      - run: isort --check .
       - run: ruff format --check .
 
   formatting-python-sdk:
@@ -30,7 +31,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.11
-      - run: pip install ruff
+      - run: pip install ruff isort
+      - run: isort --check .
       - run: ruff format --check .
 
   formatting-js-sdk:
