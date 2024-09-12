@@ -1,7 +1,9 @@
-from api.common import Level, Order, Log, _and, _or, _join
 from datetime import datetime
 from typing import Optional
+
 from pydantic import BaseModel
+
+from api.common import Level, Log, Order, _and, _join, _or
 from api.db import get_connection
 
 

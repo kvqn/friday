@@ -1,3 +1,4 @@
 mariadb
 fastapi[standard]
 ruff
+isort

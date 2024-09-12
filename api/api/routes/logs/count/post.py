@@ -1,8 +1,10 @@
-from api.common import Level, _and, _or, _join
-from typing import Optional
 from datetime import datetime
-from api.db import get_connection
+from typing import Optional
+
 from pydantic import BaseModel
+
+from api.common import Level, _and, _join, _or
+from api.db import get_connection
 
 
 class Request(BaseModel):

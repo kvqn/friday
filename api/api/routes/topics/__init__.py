@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-router = APIRouter(prefix="/topics")
-
 from .get import get
+
+router = APIRouter(prefix="/topics")
 
 router.add_api_route("/", get, methods=["GET"])
