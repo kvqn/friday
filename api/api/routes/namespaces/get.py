@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from api.db import get_cursor
+from api.db import get_connection
 
 
 class Response(BaseModel):
@@ -7,9 +7,12 @@ class Response(BaseModel):
 
 
 def get() -> Response:
-    cur = get_cursor()
+    conn = get_connection()
+    cur = conn.cursor()
+
     try:
         cur.execute("SELECT name from namespace")
         return Response(namespaces=[row[0] for row in cur.fetchall()])
     finally:
         cur.close()
+        conn.close()

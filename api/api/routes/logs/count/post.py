@@ -1,7 +1,7 @@
 from api.common import *
 from typing import Optional
 from datetime import datetime
-from api.db import get_cursor
+from api.db import get_connection
 from pydantic import BaseModel
 
 
@@ -56,7 +56,8 @@ def post(req: Request) -> Response:
 
     assert query is not None
 
-    cur = get_cursor()
+    conn = get_connection()
+    cur = conn.cursor()
     try:
         print("Got cursor")
         print("Running query", query)
@@ -66,3 +67,4 @@ def post(req: Request) -> Response:
         return {"count": result[0][0]}
     finally:
         cur.close()
+        conn.close()
