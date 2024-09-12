@@ -5,7 +5,50 @@ on:
   workflow_dispatch: {}
 
 jobs:
+  formatting-api:
+    name: Formatting (API)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - run: pip install black
+      - run: black --check .
+
+  formatting-python-sdk:
+    name: Formatting (Python SDK)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./sdks/python/friday-logger
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - run: pip install black
+      - run: black --check .
+
+  formatting-js-sdk:
+    name: Formatting (JS SDK)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./sdks/js
+    steps:
+      - uses: actions/checkout@v3
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install
+      - run: bunx prettier --check .
+
   tests:
+    name: Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -14,4 +57,3 @@ jobs:
       - name: Run Tests
         working-directory: ./tests
         run: ./run-tests.sh
-
