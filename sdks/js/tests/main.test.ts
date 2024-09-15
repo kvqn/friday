@@ -19,8 +19,8 @@ function randomStr(length?: number) {
 const endpoint = process.env.FRIDAY_ENDPOINT!
 
 async function _test(
-  namespace?: string,
-  topic?: string,
+  namespace: string | undefined,
+  topic: string | undefined,
   level: "DEBUG" | "INFO" | "WARNING" | "ERROR" | "CRITICAL",
 ) {
   const logger = createLogger({
@@ -61,32 +61,66 @@ async function _test(
   expect(log.data).toBe(message)
 }
 
-test("debug", async () => { await _test(undefined, undefined, "DEBUG") })
-test("info", async () => { await _test(undefined, undefined, "INFO") })
-test("warning", async () => { await _test(undefined, undefined, "WARNING") })
-test("error", async () => { await _test(undefined, undefined, "ERROR") })
-test("critical", async () => { await _test(undefined, undefined, "CRITICAL") })
+test("debug", async () => {
+  await _test(undefined, undefined, "DEBUG")
+})
+test("info", async () => {
+  await _test(undefined, undefined, "INFO")
+})
+test("warning", async () => {
+  await _test(undefined, undefined, "WARNING")
+})
+test("error", async () => {
+  await _test(undefined, undefined, "ERROR")
+})
+test("critical", async () => {
+  await _test(undefined, undefined, "CRITICAL")
+})
 
-test("namespace_debug", async () => { await _test(randomStr(), undefined, "DEBUG") })
-test("namespace_info", async () => { await _test(randomStr(), undefined, "INFO") })
-test("namespace_warning", async () => { await _test(randomStr(), undefined, "WARNING") })
-test("namespace_error", async () => { await _test(randomStr(), undefined, "ERROR") })
-test("namespace_critical", async () => { await _test(randomStr(), undefined, "CRITICAL") })
+test("namespace_debug", async () => {
+  await _test(randomStr(), undefined, "DEBUG")
+})
+test("namespace_info", async () => {
+  await _test(randomStr(), undefined, "INFO")
+})
+test("namespace_warning", async () => {
+  await _test(randomStr(), undefined, "WARNING")
+})
+test("namespace_error", async () => {
+  await _test(randomStr(), undefined, "ERROR")
+})
+test("namespace_critical", async () => {
+  await _test(randomStr(), undefined, "CRITICAL")
+})
 
-test("topic_debug", async () => { await _test(undefined, randomStr(), "DEBUG") })
-test("topic_info", async () => { await _test(undefined, randomStr(), "INFO") })
-test("topic_warning", async () => { await _test(undefined, randomStr(), "WARNING") })
-test("topic_error", async () => { await _test(undefined, randomStr(), "ERROR") })
-test("topic_critical", async () => { await _test(undefined, randomStr(), "CRITICAL") })
+test("topic_debug", async () => {
+  await _test(undefined, randomStr(), "DEBUG")
+})
+test("topic_info", async () => {
+  await _test(undefined, randomStr(), "INFO")
+})
+test("topic_warning", async () => {
+  await _test(undefined, randomStr(), "WARNING")
+})
+test("topic_error", async () => {
+  await _test(undefined, randomStr(), "ERROR")
+})
+test("topic_critical", async () => {
+  await _test(undefined, randomStr(), "CRITICAL")
+})
 
-test("namespace_topic_debug", async () => { await _test(randomStr(), randomStr(), "DEBUG") })
-test("namespace_topic_info", async () => { await _test(randomStr(), randomStr(), "INFO") })
-test("namespace_topic_warning", async () => { await _test(randomStr(), randomStr(), "WARNING") })
-test("namespace_topic_error", async () => { await _test(randomStr(), randomStr(), "ERROR") })
-test("namespace_topic_critical", async () => { await _test(randomStr(), randomStr(), "CRITICAL") })
-
-
-
-
-
-
+test("namespace_topic_debug", async () => {
+  await _test(randomStr(), randomStr(), "DEBUG")
+})
+test("namespace_topic_info", async () => {
+  await _test(randomStr(), randomStr(), "INFO")
+})
+test("namespace_topic_warning", async () => {
+  await _test(randomStr(), randomStr(), "WARNING")
+})
+test("namespace_topic_error", async () => {
+  await _test(randomStr(), randomStr(), "ERROR")
+})
+test("namespace_topic_critical", async () => {
+  await _test(randomStr(), randomStr(), "CRITICAL")
+})
