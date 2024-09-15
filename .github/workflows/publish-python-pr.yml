@@ -11,6 +11,11 @@ jobs:
   publish-python-pr:
     environment: development
     runs-on: ubuntu-latest
+    needs: [
+      format-python-sdk,
+      linting-python-sdk,
+      tests-python-sdk
+    ]
     steps:
       - uses: actions/checkout@v3
 
@@ -20,10 +25,6 @@ jobs:
 
       - name: Install python dependencies
         run: pip install -r requirements.txt
-        working-directory: sdks/python/friday-logger
-
-      - name: Check formatting
-        run: black --check .
         working-directory: sdks/python/friday-logger
 
       - name: Extract versions

@@ -1,8 +1,10 @@
-from api.common import *
-from typing import Optional
 from datetime import datetime
-from api.db import get_cursor
+from typing import Optional
+
 from pydantic import BaseModel
+
+from api.common import Level, _and, _join, _or
+from api.db import get_connection
 
 
 class Request(BaseModel):
@@ -56,13 +58,13 @@ def post(req: Request) -> Response:
 
     assert query is not None
 
-    cur = get_cursor()
+    conn = get_connection()
+    cur = conn.cursor()
     try:
-        print("Got cursor")
-        print("Running query", query)
         cur.execute(query)
         result = cur.fetchall()
 
         return {"count": result[0][0]}
     finally:
         cur.close()
+        conn.close()

@@ -1,9 +1,11 @@
-from fastapi.responses import JSONResponse
-from fastapi.exceptions import RequestValidationError
-from fastapi import Request, status
 import logging
-from fastapi import FastAPI
+
+from fastapi import FastAPI, Request, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
+from api.routes import router
 
 app = FastAPI()
 
@@ -25,7 +27,5 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         content=content, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
     )
 
-
-from api.routes import router
 
 app.include_router(router)

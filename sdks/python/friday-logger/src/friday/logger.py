@@ -1,9 +1,9 @@
 import logging
 from typing import Optional
-import requests
 from urllib.parse import urljoin
-from friday.types import PutLogsRequest
+
 from friday._utils import request_with_retry
+from friday.types import PutLogsRequest
 
 
 class Handler(logging.Handler):
@@ -62,7 +62,6 @@ class Logger(logging.Logger):
 
 
 class PrettyFormatter(logging.Formatter):
-
     def __init__(self, style_level: bool = True, style_message: bool = True):
         super().__init__()
 

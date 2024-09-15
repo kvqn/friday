@@ -1,6 +1,8 @@
-from pydantic import BaseModel
 from typing import Literal
-from api.db import get_cursor
+
+from pydantic import BaseModel
+
+from api.db import get_connection
 
 
 class Request(BaseModel):
@@ -11,7 +13,8 @@ class Request(BaseModel):
 
 
 def put(log: Request) -> Literal["success"]:
-    cur = get_cursor()
+    conn = get_connection()
+    cur = conn.cursor()
     try:
         queries = [
             f"INSERT INTO namespace (name) VALUES ('{log.namespace}') on duplicate key update id=id",
@@ -23,4 +26,5 @@ def put(log: Request) -> Literal["success"]:
             cur.execute(query)
     finally:
         cur.close()
+        conn.close()
         return "success"

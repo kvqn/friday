@@ -1,17 +1,31 @@
-import mariadb
-from api.env import MARIA_HOST, MARIA_PORT, MARIA_USER, MARIA_PASS, MARIA_DATABASE
+from time import sleep
 
-_conn = mariadb.connect(
+import mariadb
+
+from api.env import MARIA_DATABASE, MARIA_HOST, MARIA_PASS, MARIA_PORT, MARIA_USER
+
+pool = mariadb.ConnectionPool(
     host=MARIA_HOST,
     port=MARIA_PORT,
     user=MARIA_USER,
     password=MARIA_PASS,
     database=MARIA_DATABASE,
+    pool_name="friday_api_pool",
+    pool_size=5,
 )
 
-_conn.auto_reconnect = True
-_conn.autocommit = True
 
+def get_connection():
+    attempt = 0
+    while True:
+        try:
+            conn = pool.get_connection()
+        except mariadb.PoolError:
+            attempt += 1
+            sleep(0.1 * attempt)
+        else:
+            break
 
-def get_cursor():
-    return _conn.cursor()
+    conn.auto_reconnect = True
+    conn.autocommit = True
+    return conn

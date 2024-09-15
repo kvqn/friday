@@ -1,4 +1,3 @@
-
 type AggregatorOptions = {
   endpoint: string
 }
@@ -31,14 +30,12 @@ type Log = {
   data: string
 }
 
-
 export function createAggregator(options: AggregatorOptions) {
   return {
     logs: async (query: GetLogOptions) => {
-
       const resp = await fetch(options.endpoint + "/logs/", {
         method: "POST",
-        headers: {'Content-Type': 'application/json'},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(query),
       })
 
@@ -50,9 +47,9 @@ export function createAggregator(options: AggregatorOptions) {
     },
 
     count: async (query: CountLogOptions) => {
-      const resp = await fetch(options.endpoint + "/logs/count/" , {
+      const resp = await fetch(options.endpoint + "/logs/count/", {
         method: "POST",
-        headers: {'Content-Type': 'application/json'},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(query),
       })
 
@@ -60,16 +57,18 @@ export function createAggregator(options: AggregatorOptions) {
       return json.count
     },
 
-    namespaces: async() => {
+    namespaces: async () => {
       const resp = await fetch(options.endpoint + "/namespaces/")
       const json = (await resp.json()) as { namespaces: string[] }
       return json.namespaces
     },
 
-    topics: async({namespace} : {namespace: string}) => {
-      const resp = await fetch(options.endpoint + "/topics/" + `?namespace=${namespace}`)
+    topics: async ({ namespace }: { namespace: string }) => {
+      const resp = await fetch(
+        options.endpoint + "/topics/" + `?namespace=${namespace}`,
+      )
       const json = (await resp.json()) as { topics: string[] }
       return json.topics
-    }
+    },
   }
 }

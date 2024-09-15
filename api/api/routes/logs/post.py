@@ -1,8 +1,10 @@
-from api.common import *
 from datetime import datetime
 from typing import Optional
+
 from pydantic import BaseModel
-from api.db import get_cursor
+
+from api.common import Level, Log, Order, _and, _join, _or
+from api.db import get_connection
 
 
 class Request(BaseModel):
@@ -23,7 +25,6 @@ class Response(BaseModel):
 def post(
     req: Request,
 ) -> Response:
-    print("levels", req.levels)
     conditions = _and(
         _or(*(f"level = '{level.value}'" for level in req.levels)),
         (
@@ -67,14 +68,11 @@ def post(
     with logs as ({query}) select logs.id as id, logs.timestamp as timestamp, namespace.name as namespace, topic.name as topic, logs.level as level, logs.data as data from logs inner join namespace_topic on logs.namespace_topic_id = namespace_topic.id inner join namespace on namespace_topic.namespace_id = namespace.id inner join topic on namespace_topic.topic_id = topic.id;
     """
 
-    print(query)
-
     assert query is not None
 
-    cur = get_cursor()
+    conn = get_connection()
+    cur = conn.cursor()
     try:
-        print("Got cursor")
-        print("Running query", query)
         cur.execute(query)
         result = cur.fetchall()
 
@@ -93,3 +91,4 @@ def post(
         )
     finally:
         cur.close()
+        conn.close()

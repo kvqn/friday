@@ -2,8 +2,8 @@ import type { Level, LogData } from "./common"
 
 type LoggerOptions = {
   endpoint: string
-  namespace: string
-  topic: string
+  namespace?: string
+  topic?: string
 }
 
 type PutLog = {
@@ -12,7 +12,6 @@ type PutLog = {
   level: Level
   data: string
 }
-
 
 type Logger = {
   debug(data: LogData): Promise<void>
@@ -29,20 +28,17 @@ export function createLogger(options: LoggerOptions): Logger {
     else data_string = data as string
 
     const body: PutLog = {
-      namespace: options.namespace,
-      topic: options.topic,
+      namespace: options.namespace ?? "default",
+      topic: options.topic ?? "default",
       level: level,
       data: data_string,
     }
 
-    console.log()
-
-    await fetch(options.endpoint + "/logs", {
+    await fetch(options.endpoint + "/logs/", {
       method: "PUT",
-      headers: {'Content-Type': 'application/json'},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     })
-    console.log("log sent")
   }
 
   return {
