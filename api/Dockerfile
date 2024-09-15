@@ -7,5 +7,8 @@ RUN pip install -r requirements.txt
 
 COPY api api
 
-ENTRYPOINT ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "error"]
+HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
+  CMD test $(curl http://localhost:8000/ping/) = '{"ping":"pong"}'
+
+ENTRYPOINT ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
 

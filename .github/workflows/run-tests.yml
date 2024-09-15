@@ -91,12 +91,22 @@ jobs:
       - run: bun install
       - run: bun run lint
 
-  tests:
-    name: Tests
+  tests-python-sdk:
+    name: Tests (Python SDK)
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
       - name: Run Tests
         working-directory: ./tests
-        run: ./run-tests.sh
+        run: ./run-tests-python.sh
+
+  tests-js-sdk:
+    name: Tests (JS SDK)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Tests
+        working-directory: ./tests
+        run: ./run-tests-js.sh

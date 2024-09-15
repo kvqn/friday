@@ -6,17 +6,26 @@ services:
     volumes:
       - type: bind
         source: ../db.sql
-        target : /docker-entrypoint-initdb.d/db.sql
+        target: /docker-entrypoint-initdb.d/db.sql
         read_only: true
     healthcheck:
-        test: [ "CMD", "healthcheck.sh", "--su-mysql", "--connect", "--innodb_initialized" ]
-        start_period: 1m
-        start_interval: 10s
-        interval: 1m
-        timeout: 5s
-        retries: 3
+      test:
+        [
+          "CMD",
+          "healthcheck.sh",
+          "--su-mysql",
+          "--connect",
+          "--innodb_initialized",
+        ]
+      start_period: 1m
+      start_interval: 10s
+      interval: 1m
+      timeout: 5s
+      retries: 3
+    command: ["--silent"]
   api:
     build: ../api/
+    command: ["--log-level", "error"]
     environment:
       MARIA_HOST: mariadb
       MARIA_PORT: 3306
@@ -24,10 +33,10 @@ services:
       MARIA_PASS: root
       MARIA_DATABASE: friday
     depends_on:
-      mariadb: 
+      mariadb:
         condition: service_healthy
     links:
-    - mariadb
+      - mariadb
   test-python:
     build:
       context: ../sdks/python/friday-logger/
@@ -42,7 +51,8 @@ services:
     environment:
       FRIDAY_ENDPOINT: http://api:8000
     depends_on:
-      api: 
-        condition: service_started
+      api:
+        condition: service_healthy
     links:
-    - api
+      - api
+

@@ -35,5 +35,22 @@ services:
         condition: service_healthy
     links:
       - mariadb
-    ports:
-      - "5001:8000"
+  test-js:
+    build:
+      context: ../sdks/js/
+      dockerfile_inline: |
+        FROM oven/bun:latest
+        WORKDIR /app
+        COPY package.json .
+        RUN bun install
+        COPY src src
+        COPY tests tests
+        ENTRYPOINT ["bun", "test"]
+    environment:
+      FRIDAY_ENDPOINT: http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+    links:
+      - api
+
