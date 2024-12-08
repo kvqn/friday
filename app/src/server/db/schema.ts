@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm"
 import {
   bigint,
   index,
@@ -8,8 +8,8 @@ import {
   text,
   timestamp,
   varchar,
-} from "drizzle-orm/mysql-core";
-import { type AdapterAccount } from "next-auth/adapters";
+} from "drizzle-orm/mysql-core"
+import { type AdapterAccount } from "next-auth/adapters"
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -17,7 +17,7 @@ import { type AdapterAccount } from "next-auth/adapters";
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = mysqlTableCreator((name) => `app_${name}`);
+export const createTable = mysqlTableCreator((name) => `app_${name}`)
 
 export const users = createTable("user", {
   id: varchar("id", { length: 255 })
@@ -31,12 +31,12 @@ export const users = createTable("user", {
     fsp: 3,
   }).default(sql`CURRENT_TIMESTAMP(3)`),
   image: varchar("image", { length: 255 }),
-});
+})
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
-}));
+}))
 
 export const accounts = createTable(
   "account",
@@ -65,11 +65,11 @@ export const accounts = createTable(
     }),
     userIdIdx: index("account_user_id_idx").on(account.userId),
   }),
-);
+)
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] }),
-}));
+}))
 
 export const sessions = createTable(
   "session",
@@ -85,11 +85,11 @@ export const sessions = createTable(
   (session) => ({
     userIdIdx: index("session_user_id_idx").on(session.userId),
   }),
-);
+)
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),
-}));
+}))
 
 export const verificationTokens = createTable(
   "verification_token",
@@ -101,4 +101,4 @@ export const verificationTokens = createTable(
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   }),
-);
+)
