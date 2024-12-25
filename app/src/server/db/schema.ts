@@ -3,13 +3,16 @@ import {
   bigint,
   index,
   int,
+  mysqlEnum,
   mysqlTableCreator,
   primaryKey,
   text,
   timestamp,
+  unique,
   varchar,
 } from "drizzle-orm/mysql-core"
 import { type AdapterAccount } from "next-auth/adapters"
+import { createId } from "@paralleldrive/cuid2"
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -100,5 +103,81 @@ export const verificationTokens = createTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
+  }),
+)
+
+export const projects = createTable("project", {
+  id: bigint("id", { mode: "number" }).notNull().primaryKey().autoincrement(),
+  name: varchar("name", { length: 255 }).notNull(),
+  ownerId: varchar("owner_id", { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  description: text("description"),
+})
+
+export const namespaces = createTable(
+  "namespace",
+  {
+    id: bigint("id", { mode: "number" }).notNull().primaryKey().autoincrement(),
+    projectId: bigint("project_id", { mode: "number" })
+      .notNull()
+      .references(() => projects.id),
+    name: varchar("name", { length: 255 }).notNull(),
+  },
+  (table) => ({
+    uniqueName: unique("namespace_name_unique").on(table.projectId, table.name),
+  }),
+)
+
+export const logs = createTable("log", {
+  id: bigint("id", { mode: "number" }).notNull().primaryKey().autoincrement(),
+  namespaceId: bigint("namespace_id", { mode: "number" })
+    .notNull()
+    .references(() => namespaces.id),
+  message: text("message"),
+  level: mysqlEnum("level", [
+    "debug",
+    "info",
+    "warning",
+    "error",
+    "critical",
+  ]).notNull(),
+  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+})
+
+export const projectTokens = createTable("project_token", {
+  id: bigint("id", { mode: "number" }).notNull().primaryKey().autoincrement(),
+  token: varchar("token", { length: 24 })
+    .$defaultFn(() => createId())
+    .unique(),
+  projectId: bigint("project_id", { mode: "number" }).references(
+    () => projects.id,
+  ),
+})
+
+export const finegrainedTokens = createTable("finegrained_token", {
+  id: bigint("id", { mode: "number" }).notNull().primaryKey().autoincrement(),
+  token: varchar("token", { length: 24 })
+    .$defaultFn(() => createId())
+    .unique(),
+  projectId: bigint("project_id", { mode: "number" }).references(
+    () => projects.id,
+  ),
+})
+
+export const fgTokenNamespaces = createTable(
+  "fg_token_namespace",
+  {
+    tokenId: bigint("token_id", { mode: "number" }).references(
+      () => finegrainedTokens.id,
+    ),
+    namespaceId: bigint("namespace_id", { mode: "number" }).references(
+      () => namespaces.id,
+    ),
+  },
+  (table) => ({
+    pk: primaryKey({
+      columns: [table.tokenId, table.namespaceId],
+    }),
   }),
 )

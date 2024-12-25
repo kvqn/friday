@@ -1,10 +1,10 @@
 import { SignOut } from "@/components/auth"
 import { auth } from "@/server/auth"
 import { redirect } from "next/navigation"
+import { toast } from "sonner"
 
 export default async function Page() {
   const session = await auth()
-
   if (!session) redirect("/signin")
   return (
     <div>

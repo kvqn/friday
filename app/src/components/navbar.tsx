@@ -15,7 +15,9 @@ async function SessionInfo() {
   }
   return (
     <div className="flex items-center gap-4">
-      <Link href="/dashboard">Dashboard</Link>
+      <Button>
+        <Link href="/projects">Projects</Link>
+      </Button>
 
       <Link
         href="/account"
