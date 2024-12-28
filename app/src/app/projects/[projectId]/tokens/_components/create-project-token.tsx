@@ -9,21 +9,20 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
+import { createProjectToken } from "@/server/actions/create-project-token"
 import { useState } from "react"
 import { toast } from "sonner"
 
 export function CreateProjectToken({ projectId }: { projectId: number }) {
   const [disabled, setDisabled] = useState(false)
-  const [name, setName] = useState("")
+  const [description, setDescription] = useState("")
   const [open, setOpen] = useState(false)
 
   async function submit() {
     setDisabled(true)
-    const resp = await createNamespace({ projectId, name })
+    const resp = await createProjectToken({ projectId, description })
     if (resp.status === "success") {
-      toast.success("Token Created", {
-        description: "Project token has been created successfully",
-      })
+      toast.success(resp.message)
       setOpen(false)
     } else {
       toast.error("Error while creating token", {
@@ -35,17 +34,27 @@ export function CreateProjectToken({ projectId }: { projectId: number }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>Add a token</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button>Add Project Token</Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add a token</DialogTitle>
-          <DialogDescription>Create a new token.</DialogDescription>
+          <DialogTitle>Add Project Token</DialogTitle>
+          <DialogDescription>
+            Project Tokens can be used throughout all the namespaces within the
+            project.
+          </DialogDescription>
         </DialogHeader>
-        <label htmlFor="project-name">Namespace</label>
+        <div className="flex items-center gap-2">
+          <label htmlFor="description" className="font-semibold">
+            Description
+          </label>
+          <p className="text-sm text-gray-400">(optional)</p>
+        </div>
         <Input
-          name="namespace"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          name="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
         <Button disabled={disabled} onClick={submit}>
           Create

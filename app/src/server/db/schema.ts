@@ -148,32 +148,36 @@ export const logs = createTable("log", {
 export const projectTokens = createTable("project_token", {
   id: bigint("id", { mode: "number" }).notNull().primaryKey().autoincrement(),
   token: varchar("token", { length: 24 })
+    .notNull()
     .$defaultFn(() => createId())
     .unique(),
-  projectId: bigint("project_id", { mode: "number" }).references(
-    () => projects.id,
-  ),
+  projectId: bigint("project_id", { mode: "number" })
+    .notNull()
+    .references(() => projects.id),
+  description: text("description"),
 })
 
 export const finegrainedTokens = createTable("finegrained_token", {
   id: bigint("id", { mode: "number" }).notNull().primaryKey().autoincrement(),
   token: varchar("token", { length: 24 })
+    .notNull()
     .$defaultFn(() => createId())
     .unique(),
-  projectId: bigint("project_id", { mode: "number" }).references(
-    () => projects.id,
-  ),
+  projectId: bigint("project_id", { mode: "number" })
+    .notNull()
+    .references(() => projects.id),
+  description: text("description"),
 })
 
 export const fgTokenNamespaces = createTable(
   "fg_token_namespace",
   {
-    tokenId: bigint("token_id", { mode: "number" }).references(
-      () => finegrainedTokens.id,
-    ),
-    namespaceId: bigint("namespace_id", { mode: "number" }).references(
-      () => namespaces.id,
-    ),
+    tokenId: bigint("token_id", { mode: "number" })
+      .notNull()
+      .references(() => finegrainedTokens.id),
+    namespaceId: bigint("namespace_id", { mode: "number" })
+      .notNull()
+      .references(() => namespaces.id),
   },
   (table) => ({
     pk: primaryKey({
