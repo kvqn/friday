@@ -1,24 +1,32 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
-import { auth } from "../auth"
+import { and, eq } from "drizzle-orm"
 import { db } from "../db"
 import { namespaces, projects } from "../db/schema"
-import { eq, and } from "drizzle-orm"
+import { auth } from "../auth"
+import { revalidatePath } from "next/cache"
 
-export async function createNamespace({
-  projectId,
-  name,
-}: {
-  projectId: number
-  name: string
-}) {
+export async function renameNamespace(namespaceId: number, name: string) {
   const session = await auth()
   if (!session)
     return {
       status: "error" as const,
       message: "You are not allowed to perform that action",
     }
+
+  const namespace = await db
+    .select({ projectId: namespaces.projectId })
+    .from(namespaces)
+    .where(eq(namespaces.id, namespaceId))
+    .limit(1)
+
+  if (!namespace[0])
+    return {
+      status: "error" as const,
+      message: "Namespace not found",
+    }
+
+  const projectId = namespace[0].projectId
 
   const project = await db
     .select({ id: projects.id, ownerId: projects.ownerId })
@@ -56,11 +64,15 @@ export async function createNamespace({
       message: "That namespace already exists",
     }
 
-  await db.insert(namespaces).values({ projectId, name })
+  await db
+    .update(namespaces)
+    .set({ name: name })
+    .where(eq(namespaces.id, namespaceId))
 
   revalidatePath(`/projects/${projectId}/namespaces`)
+
   return {
     status: "success" as const,
-    message: "Namespace created",
+    message: `Namespace renamed to ${name}`,
   }
 }

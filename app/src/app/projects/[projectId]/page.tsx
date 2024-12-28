@@ -1,9 +1,10 @@
 import { permanentRedirect } from "next/navigation"
 
 export default async function Page({
-  params: { projectId },
+  params,
 }: {
-  params: { projectId: string }
+  params: Promise<{ projectId: string }>
 }) {
+  const projectId = (await params).projectId
   permanentRedirect(`/projects/${projectId}/dashboard`)
 }

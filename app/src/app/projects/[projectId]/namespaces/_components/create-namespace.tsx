@@ -36,7 +36,9 @@ export function CreateNamespace({ projectId }: { projectId: number }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>Add a namespace</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button>Add a namespace</Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add a namespace</DialogTitle>
