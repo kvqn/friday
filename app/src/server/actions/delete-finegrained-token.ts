@@ -3,19 +3,19 @@
 import { eq } from "drizzle-orm"
 import { auth } from "../auth"
 import { db } from "../db"
-import { projects, projectTokens } from "../db/schema"
+import { finegrainedTokens, projects } from "../db/schema"
 import { revalidatePath } from "next/cache"
 
-export async function deleteProjectToken(tokenId: number) {
+export async function deleteFinegrainedToken(tokenId: number) {
   const session = await auth()
   if (!session) {
     return { status: "error", message: "Not authenticated" }
   }
 
   const token = await db
-    .select({ projectId: projectTokens.projectId })
-    .from(projectTokens)
-    .where(eq(projectTokens.id, tokenId))
+    .select({ projectId: finegrainedTokens.projectId })
+    .from(finegrainedTokens)
+    .where(eq(finegrainedTokens.id, tokenId))
     .limit(1)
   if (!token[0]) {
     return { status: "error", message: "Token not found" }
@@ -36,7 +36,7 @@ export async function deleteProjectToken(tokenId: number) {
     return { status: "error", message: "Unauthorized" }
   }
 
-  await db.delete(projectTokens).where(eq(projectTokens.id, tokenId))
+  await db.delete(finegrainedTokens).where(eq(finegrainedTokens.id, tokenId))
 
   revalidatePath(`/projects/${projectId}/tokens`)
 

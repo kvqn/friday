@@ -111,7 +111,7 @@ export const projects = createTable("project", {
   name: varchar("name", { length: 255 }).notNull(),
   ownerId: varchar("owner_id", { length: 255 })
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade" }),
   description: text("description"),
 })
 
@@ -121,7 +121,7 @@ export const namespaces = createTable(
     id: bigint("id", { mode: "number" }).notNull().primaryKey().autoincrement(),
     projectId: bigint("project_id", { mode: "number" })
       .notNull()
-      .references(() => projects.id),
+      .references(() => projects.id, { onDelete: "cascade" }),
     name: varchar("name", { length: 255 }).notNull(),
   },
   (table) => ({
@@ -133,7 +133,7 @@ export const logs = createTable("log", {
   id: bigint("id", { mode: "number" }).notNull().primaryKey().autoincrement(),
   namespaceId: bigint("namespace_id", { mode: "number" })
     .notNull()
-    .references(() => namespaces.id),
+    .references(() => namespaces.id, { onDelete: "cascade" }),
   message: text("message"),
   level: mysqlEnum("level", [
     "debug",
@@ -153,7 +153,7 @@ export const projectTokens = createTable("project_token", {
     .unique(),
   projectId: bigint("project_id", { mode: "number" })
     .notNull()
-    .references(() => projects.id),
+    .references(() => projects.id, { onDelete: "cascade" }),
   description: text("description"),
 })
 
@@ -165,7 +165,7 @@ export const finegrainedTokens = createTable("finegrained_token", {
     .unique(),
   projectId: bigint("project_id", { mode: "number" })
     .notNull()
-    .references(() => projects.id),
+    .references(() => projects.id, { onDelete: "cascade" }),
   description: text("description"),
 })
 
@@ -174,10 +174,10 @@ export const fgTokenNamespaces = createTable(
   {
     tokenId: bigint("token_id", { mode: "number" })
       .notNull()
-      .references(() => finegrainedTokens.id),
+      .references(() => finegrainedTokens.id, { onDelete: "cascade" }),
     namespaceId: bigint("namespace_id", { mode: "number" })
       .notNull()
-      .references(() => namespaces.id),
+      .references(() => namespaces.id, { onDelete: "cascade" }),
   },
   (table) => ({
     pk: primaryKey({

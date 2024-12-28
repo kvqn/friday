@@ -1,16 +1,20 @@
-import { getTokens } from "@/lib/queries"
+import { getNamespaces, getTokens } from "@/lib/queries"
 import { CreateProjectToken } from "./_components/create-project-token"
 import { ProjectTokensTable } from "./_components/project-tokens-table"
+import { FinegranedTokensTable } from "./_components/finegrained-tokens-table"
+import { CreateFinegrainedToken } from "./_components/create-finegrained-token"
 
 export default async function Page({
-  params: { projectId },
+  params,
 }: {
-  params: { projectId: string }
+  params: Promise<{ projectId: string }>
 }) {
+  const { projectId } = await params
   const tokens = await getTokens(parseInt(projectId))
+  const namespaces = await getNamespaces(parseInt(projectId))
   return (
     <div className="flex flex-col items-center p-8">
-      <div className="w-4/5">
+      <div className="w-5/6">
         <h2 className="w-full text-left text-xl font-bold">Tokens</h2>
         <h3 className="text-lg font-semibold">Project Tokens</h3>
         <div className="flex flex-col items-center justify-center gap-4 p-4 px-16">
@@ -34,9 +38,15 @@ export default async function Page({
               }
             </p>
           ) : (
-            <p>{JSON.stringify(tokens.finegrained_tokens)}</p>
+            <FinegranedTokensTable
+              tokens={tokens.finegrained_tokens}
+              namespaces={namespaces}
+            />
           )}
-          <div className="flex w-full justify-end">create</div>
+          <CreateFinegrainedToken
+            projectId={parseInt(projectId)}
+            namespaces={namespaces}
+          />
         </div>
       </div>
     </div>

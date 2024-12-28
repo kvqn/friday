@@ -1,5 +1,6 @@
 import { db } from "@/server/db"
 import {
+  fgTokenNamespaces,
   finegrainedTokens,
   namespaces,
   projects,
@@ -28,10 +29,32 @@ export async function getTokens(projectId: number) {
     .select()
     .from(projectTokens)
     .where(eq(projectTokens.projectId, projectId))
-  const finegrained_tokens = await db
-    .select()
-    .from(finegrainedTokens)
-    .where(eq(finegrainedTokens.projectId, projectId))
+
+  const finegrained_tokens = await Promise.all(
+    (
+      await db
+        .select()
+        .from(finegrainedTokens)
+        .where(eq(finegrainedTokens.projectId, projectId))
+    ).map((token) => {
+      return (async () => {
+        return {
+          ...token,
+          namespaces: await db
+            .select({
+              id: namespaces.id,
+              name: namespaces.name,
+            })
+            .from(fgTokenNamespaces)
+            .where(eq(fgTokenNamespaces.tokenId, token.id))
+            .innerJoin(
+              namespaces,
+              eq(fgTokenNamespaces.namespaceId, namespaces.id),
+            ),
+        }
+      })()
+    }),
+  )
 
   return { project_tokens, finegrained_tokens }
 }
