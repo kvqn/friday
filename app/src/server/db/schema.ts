@@ -136,13 +136,13 @@ export const logs = createTable("log", {
     .references(() => namespaces.id, { onDelete: "cascade" }),
   message: text("message"),
   level: mysqlEnum("level", [
-    "debug",
-    "info",
-    "warning",
-    "error",
-    "critical",
+    "DEBUG",
+    "INFO",
+    "WARNING",
+    "ERROR",
+    "CRITICAL",
   ]).notNull(),
-  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+  timestamp: timestamp("timestamp", { mode: "date" }).notNull().defaultNow(),
 })
 
 export const projectTokens = createTable("project_token", {
