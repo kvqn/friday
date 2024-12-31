@@ -134,7 +134,7 @@ export const logs = createTable("log", {
   namespaceId: bigint("namespace_id", { mode: "number" })
     .notNull()
     .references(() => namespaces.id, { onDelete: "cascade" }),
-  message: text("message"),
+  message: text("message").notNull(),
   level: mysqlEnum("level", [
     "DEBUG",
     "INFO",

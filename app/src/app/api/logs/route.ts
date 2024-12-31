@@ -20,20 +20,33 @@ const RequestSchema = z.object({
   level: LevelSchema,
 })
 
-export async function PUT(req: Request) {
+export async function getScope(req: Request) {
   const authorization = req.headers.get("authorization")
   if (!authorization?.startsWith("Bearer ")) {
-    return Response.json({ message: "Unauthorized" }, { status: 401 })
+    return null
   }
   const token = authorization.slice(7)
-  const data = RequestSchema.parse(await req.json())
 
   let scope: Awaited<ReturnType<typeof getTokenScope>>
   try {
     scope = await getTokenScope(token)
   } catch {
+    return null
+  }
+
+  return scope
+}
+
+export async function PUT(req: Request) {
+  const scope = await getScope(req)
+  if (!scope) {
     return Response.json({ message: "Unauthorized" }, { status: 401 })
   }
+  const parsing = RequestSchema.safeParse(await req.json())
+  if (!parsing.success) {
+    return Response.json({ message: "Bad request" }, { status: 400 })
+  }
+  const data = parsing.data
 
   const namespaceId = scope.namespaces.get(data.namespace)
   if (!namespaceId) {

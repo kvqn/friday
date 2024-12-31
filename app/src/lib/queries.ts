@@ -8,7 +8,7 @@ import {
   projects,
   projectTokens,
 } from "@/server/db/schema"
-import { eq } from "drizzle-orm"
+import { and, count, desc, eq, gte, lte } from "drizzle-orm"
 import type { z } from "zod"
 
 export async function getProject(projectId: string) {
@@ -124,4 +124,85 @@ export async function insertLog({
     })
     .$returningId()
   return logId[0]!.id
+}
+
+export async function getLogs({
+  namespaceId,
+  from,
+  to,
+}: {
+  namespaceId: number
+  from: Date
+  to?: Date
+}) {
+  return db
+    .select()
+    .from(logs)
+    .where(
+      and(
+        eq(logs.namespaceId, namespaceId),
+        gte(logs.timestamp, from),
+        to ? lte(logs.timestamp, to) : undefined,
+      ),
+    )
+    .orderBy(desc(logs.timestamp))
+}
+
+export async function getLogsCount({
+  namespaceId,
+  from,
+  to,
+}: {
+  namespaceId: number
+  from: Date
+  to?: Date
+}) {
+  return (
+    await db
+      .select({ count: count() })
+      .from(logs)
+      .where(
+        and(
+          eq(logs.namespaceId, namespaceId),
+          gte(logs.timestamp, from),
+          to ? lte(logs.timestamp, to) : undefined,
+        ),
+      )
+      .orderBy(desc(logs.timestamp))
+  )[0]!.count
+}
+
+export async function getLatestNamespaceLogs({
+  namespaceId,
+  limit,
+}: {
+  namespaceId: number
+  limit: number
+}) {
+  return await db
+    .select()
+    .from(logs)
+    .where(eq(logs.namespaceId, namespaceId))
+    .orderBy(desc(logs.timestamp))
+    .limit(limit)
+}
+
+export async function getLatestProjectLogs({
+  projectId,
+  limit,
+}: {
+  projectId: number
+  limit: number
+}) {
+  return (
+    await db
+      .select({
+        logs,
+      })
+      .from(logs)
+      .innerJoin(namespaces, eq(logs.namespaceId, namespaces.id))
+      .where(eq(namespaces.projectId, projectId))
+      .orderBy(desc(logs.timestamp))
+      .limit(limit)
+  ).map(({ logs }) => logs)
 }
